@@ -104,7 +104,7 @@
           <!-- Popular Filters -->
           <div class="filter-section">
             <div class="filter-title" @click="toggleFilterSection('popular')">
-              Popular filters a
+              Popular filters
               <svg
                 class="arrow"
                 :class="{ collapsed: !expandedSections.popular }"

@@ -94,14 +94,10 @@
       <div class="content-wrapper">
         <!-- Left Column -->
         <div class="left-column">
-          <!-- Hotel Information -->
-          <HotelDetailHeader
-            :hotel-data="hotelData"
-            :initial-favorite="isFavorite"
-            @toggle-favorite="handleToggleFavorite"
-            @show-hotel-details="showHotelDetails"
-            @show-map="showMap"
-            @show-alternative-flights="scrollToAlternativeFlights"
+          <HotelCalendar
+            :initial-selected-date="selectedDate"
+            @date-selected="handleDateSelected"
+            @price-toggle="handlePriceToggle"
           />
 
           <!-- Refine Your Holiday -->
@@ -113,17 +109,17 @@
           />
         </div>
 
-        <!-- Middle Column - Calendar -->
-        <div class="middle-column">
-          <HotelCalendar
-            :initial-selected-date="selectedDate"
-            @date-selected="handleDateSelected"
-            @price-toggle="handlePriceToggle"
-          />
-        </div>
-
         <!-- Right Column -->
         <div class="right-column">
+          <!-- Hotel Information -->
+          <HotelDetailHeader
+            :hotel-data="hotelData"
+            :initial-favorite="isFavorite"
+            @toggle-favorite="handleToggleFavorite"
+            @show-hotel-details="showHotelDetails"
+            @show-map="showMap"
+            @show-alternative-flights="scrollToAlternativeFlights"
+          />
           <HotelOfferCard
             :offer-data="currentOffer"
             @select-holiday="handleSelectHoliday"
@@ -512,17 +508,10 @@ export default {
 
 .left-column {
   flex: 1;
-  min-width: 0;
-}
-
-.middle-column {
-  flex: 1;
-  min-width: 0;
 }
 
 .right-column {
-  width: 350px;
-  flex-shrink: 0;
+  flex: 1;
 }
 
 /* Alternative Flights Section */
@@ -544,7 +533,6 @@ export default {
   }
 
   .left-column,
-  .middle-column,
   .right-column {
     width: 100%;
   }
