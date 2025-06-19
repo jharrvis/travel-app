@@ -5,7 +5,7 @@
       <div class="search-form">
         <div class="form-row">
           <div class="form-group">
-            <label>Destination or Hotel</label>
+            <label>Destination(s) or Hotel name</label>
             <div class="location-input">
               <input
                 type="text"
@@ -83,7 +83,7 @@
           <!-- Popular Filters -->
           <div class="filter-section">
             <div class="filter-title" @click="toggleFilterSection('popular')">
-              Popular filters
+              Popular filters a
               <svg
                 class="arrow"
                 :class="{ collapsed: !expandedSections.popular }"
@@ -126,6 +126,134 @@
                   "
                 >
                   Beach
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Promotions -->
+          <div class="filter-section">
+            <div
+              class="filter-title"
+              @click="toggleFilterSection('promotions')"
+            >
+              Promotions
+              <svg
+                class="arrow"
+                :class="{ collapsed: !expandedSections.promotions }"
+                viewBox="0 0 24 24"
+              >
+                <path d="M7 10l5 5 5-5z" />
+              </svg>
+            </div>
+            <div
+              class="filter-content"
+              :class="{ collapsed: !expandedSections.promotions }"
+            >
+              <div class="filter-list">
+                <div
+                  class="filter-item"
+                  @click="toggleFilterCheckbox('exclusive')"
+                >
+                  <div class="filter-item-left">
+                    <div
+                      class="filter-checkbox"
+                      :class="{ checked: filters.exclusive }"
+                    ></div>
+                    <span class="filter-label">Exclusive</span>
+                  </div>
+                </div>
+                <div
+                  class="filter-item"
+                  @click="toggleFilterCheckbox('freeChildStays')"
+                >
+                  <div class="filter-item-left">
+                    <div
+                      class="filter-checkbox"
+                      :class="{ checked: filters.freeChildStays }"
+                    ></div>
+                    <span class="filter-label">Free child stays</span>
+                  </div>
+                  <div class="filter-count">1</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Popular Resorts -->
+          <div class="filter-section">
+            <div
+              class="filter-title"
+              @click="toggleFilterSection('popularResorts')"
+            >
+              Popular resorts
+              <svg
+                class="arrow"
+                :class="{ collapsed: !expandedSections.popularResorts }"
+                viewBox="0 0 24 24"
+              >
+                <path d="M7 10l5 5 5-5z" />
+              </svg>
+            </div>
+            <div
+              class="filter-content"
+              :class="{ collapsed: !expandedSections.popularResorts }"
+            >
+              <div class="filter-list">
+                <div
+                  v-for="resort in popularResorts"
+                  :key="resort.name"
+                  class="filter-item"
+                  @click="toggleResort(resort.name)"
+                >
+                  <div class="filter-item-left">
+                    <div
+                      class="filter-checkbox"
+                      :class="{
+                        checked: filters.resorts.includes(resort.name),
+                      }"
+                    ></div>
+                    <span class="filter-label">{{ resort.name }}</span>
+                  </div>
+                  <div class="filter-count">{{ resort.count }}</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Board Basis -->
+          <div class="filter-section">
+            <div
+              class="filter-title"
+              @click="toggleFilterSection('boardBasis')"
+            >
+              Board basis
+              <svg
+                class="arrow"
+                :class="{ collapsed: !expandedSections.boardBasis }"
+                viewBox="0 0 24 24"
+              >
+                <path d="M7 10l5 5 5-5z" />
+              </svg>
+            </div>
+            <div
+              class="filter-content"
+              :class="{ collapsed: !expandedSections.boardBasis }"
+            >
+              <div class="filter-list">
+                <div
+                  v-for="basis in boardBasisOptions"
+                  :key="basis"
+                  class="filter-item"
+                  @click="toggleBoardBasis(basis)"
+                >
+                  <div class="filter-item-left">
+                    <div
+                      class="filter-checkbox"
+                      :class="{ checked: filters.boardBasis.includes(basis) }"
+                    ></div>
+                    <span class="filter-label">{{ basis }}</span>
+                  </div>
                 </div>
               </div>
             </div>
@@ -181,20 +309,39 @@
                   </div>
                   <div class="filter-count">{{ getStarCount(3) }}</div>
                 </div>
+                <div class="filter-item" @click="toggleStarFilter(2)">
+                  <div class="filter-item-left">
+                    <div
+                      class="filter-checkbox"
+                      :class="{ checked: filters.stars.includes(2) }"
+                    ></div>
+                    <span class="filter-label">2-star hotel</span>
+                  </div>
+                  <div class="filter-count">1</div>
+                </div>
+                <div class="filter-item" @click="toggleStarFilter(1)">
+                  <div class="filter-item-left">
+                    <div
+                      class="filter-checkbox"
+                      :class="{ checked: filters.stars.includes(1) }"
+                    ></div>
+                    <span class="filter-label">1-star hotel</span>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
 
-          <!-- Board Basis -->
+          <!-- Tripadvisor Score -->
           <div class="filter-section">
             <div
               class="filter-title"
-              @click="toggleFilterSection('boardBasis')"
+              @click="toggleFilterSection('tripadvisor')"
             >
-              Board basis
+              Tripadvisor score
               <svg
                 class="arrow"
-                :class="{ collapsed: !expandedSections.boardBasis }"
+                :class="{ collapsed: !expandedSections.tripadvisor }"
                 viewBox="0 0 24 24"
               >
                 <path d="M7 10l5 5 5-5z" />
@@ -202,22 +349,91 @@
             </div>
             <div
               class="filter-content"
-              :class="{ collapsed: !expandedSections.boardBasis }"
+              :class="{ collapsed: !expandedSections.tripadvisor }"
             >
               <div class="filter-list">
                 <div
-                  v-for="basis in boardBasisOptions"
-                  :key="basis"
                   class="filter-item"
-                  @click="toggleBoardBasis(basis)"
+                  @click="toggleRadio('tripadvisor', 'any')"
                 >
                   <div class="filter-item-left">
                     <div
-                      class="filter-checkbox"
-                      :class="{ checked: filters.boardBasis.includes(basis) }"
+                      class="filter-radio"
+                      :class="{ checked: filters.tripadvisorScore === 'any' }"
+                      data-group="tripadvisor"
                     ></div>
-                    <span class="filter-label">{{ basis }}</span>
+                    <span class="filter-label">Any</span>
                   </div>
+                </div>
+                <div
+                  class="filter-item"
+                  @click="toggleRadio('tripadvisor', '5')"
+                >
+                  <div class="filter-item-left">
+                    <div
+                      class="filter-radio"
+                      :class="{ checked: filters.tripadvisorScore === '5' }"
+                      data-group="tripadvisor"
+                    ></div>
+                    <span class="filter-label">5</span>
+                  </div>
+                  <div class="filter-count">1</div>
+                </div>
+                <div
+                  class="filter-item"
+                  @click="toggleRadio('tripadvisor', '4.5')"
+                >
+                  <div class="filter-item-left">
+                    <div
+                      class="filter-radio"
+                      :class="{ checked: filters.tripadvisorScore === '4.5' }"
+                      data-group="tripadvisor"
+                    ></div>
+                    <span class="filter-label">4.5 and above</span>
+                  </div>
+                  <div class="filter-count">12</div>
+                </div>
+                <div
+                  class="filter-item"
+                  @click="toggleRadio('tripadvisor', '4')"
+                >
+                  <div class="filter-item-left">
+                    <div
+                      class="filter-radio"
+                      :class="{ checked: filters.tripadvisorScore === '4' }"
+                      data-group="tripadvisor"
+                    ></div>
+                    <span class="filter-label">4 and above</span>
+                  </div>
+                  <div class="filter-count">12</div>
+                </div>
+                <div
+                  class="filter-item"
+                  @click="toggleRadio('tripadvisor', '3.5')"
+                >
+                  <div class="filter-item-left">
+                    <div
+                      class="filter-radio"
+                      :class="{ checked: filters.tripadvisorScore === '3.5' }"
+                      data-group="tripadvisor"
+                    ></div>
+                    <span class="filter-label">3.5 and above</span>
+                  </div>
+                  <div class="filter-count">12</div>
+                </div>
+                <div
+                  class="filter-item"
+                  @click="toggleRadio('tripadvisor', '3')"
+                >
+                  <div class="filter-item-left">
+                    <div
+                      class="filter-radio"
+                      :class="{ checked: filters.tripadvisorScore === '3' }"
+                      data-group="tripadvisor"
+                    ></div>
+                    <span class="filter-label">3 and above</span>
+                  </div>
+                  <div class="filter-count">12</div>
                 </div>
               </div>
             </div>
@@ -256,47 +472,6 @@
                 <div class="price-range-values">
                   <span>£200</span>
                   <span>{{ priceRangeMax }}</span>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Popular Resorts -->
-          <div class="filter-section">
-            <div
-              class="filter-title"
-              @click="toggleFilterSection('popularResorts')"
-            >
-              Popular resorts
-              <svg
-                class="arrow"
-                :class="{ collapsed: !expandedSections.popularResorts }"
-                viewBox="0 0 24 24"
-              >
-                <path d="M7 10l5 5 5-5z" />
-              </svg>
-            </div>
-            <div
-              class="filter-content"
-              :class="{ collapsed: !expandedSections.popularResorts }"
-            >
-              <div class="filter-list">
-                <div
-                  v-for="resort in popularResorts"
-                  :key="resort.name"
-                  class="filter-item"
-                  @click="toggleResort(resort.name)"
-                >
-                  <div class="filter-item-left">
-                    <div
-                      class="filter-checkbox"
-                      :class="{
-                        checked: filters.resorts.includes(resort.name),
-                      }"
-                    ></div>
-                    <span class="filter-label">{{ resort.name }}</span>
-                  </div>
-                  <div class="filter-count">{{ resort.count }}</div>
                 </div>
               </div>
             </div>
@@ -344,84 +519,335 @@
               </div>
             </div>
           </div>
+
+          <!-- Outbound Times -->
+          <div class="filter-section">
+            <div
+              class="filter-title"
+              @click="toggleFilterSection('outboundTimes')"
+            >
+              Outbound times
+              <svg
+                class="arrow"
+                :class="{ collapsed: !expandedSections.outboundTimes }"
+                viewBox="0 0 24 24"
+              >
+                <path d="M7 10l5 5 5-5z" />
+              </svg>
+            </div>
+            <div
+              class="filter-content"
+              :class="{ collapsed: !expandedSections.outboundTimes }"
+            >
+              <div class="filter-list">
+                <div
+                  class="filter-item"
+                  @click="toggleFilterCheckbox('morningOut')"
+                >
+                  <div class="filter-item-left">
+                    <div
+                      class="filter-checkbox"
+                      :class="{ checked: filters.morningOut }"
+                    ></div>
+                    <div class="time-slot">
+                      <span class="filter-label">Morning</span>
+                      <span class="time-range">06:00-11:59</span>
+                    </div>
+                  </div>
+                </div>
+                <div
+                  class="filter-item"
+                  @click="toggleFilterCheckbox('afternoonOut')"
+                >
+                  <div class="filter-item-left">
+                    <div
+                      class="filter-checkbox"
+                      :class="{ checked: filters.afternoonOut }"
+                    ></div>
+                    <div class="time-slot">
+                      <span class="filter-label">Afternoon</span>
+                      <span class="time-range">12:00-17:59</span>
+                    </div>
+                  </div>
+                </div>
+                <div
+                  class="filter-item"
+                  @click="toggleFilterCheckbox('eveningOut')"
+                >
+                  <div class="filter-item-left">
+                    <div
+                      class="filter-checkbox"
+                      :class="{ checked: filters.eveningOut }"
+                    ></div>
+                    <div class="time-slot">
+                      <span class="filter-label">Evening</span>
+                      <span class="time-range">18:00-23:59</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Inbound Times -->
+          <div class="filter-section">
+            <div
+              class="filter-title"
+              @click="toggleFilterSection('inboundTimes')"
+            >
+              Inbound times
+              <svg
+                class="arrow"
+                :class="{ collapsed: !expandedSections.inboundTimes }"
+                viewBox="0 0 24 24"
+              >
+                <path d="M7 10l5 5 5-5z" />
+              </svg>
+            </div>
+            <div
+              class="filter-content"
+              :class="{ collapsed: !expandedSections.inboundTimes }"
+            >
+              <div class="filter-list">
+                <div
+                  class="filter-item"
+                  @click="toggleFilterCheckbox('morningIn')"
+                >
+                  <div class="filter-item-left">
+                    <div
+                      class="filter-checkbox"
+                      :class="{ checked: filters.morningIn }"
+                    ></div>
+                    <div class="time-slot">
+                      <span class="filter-label">Morning</span>
+                      <span class="time-range">00:00-11:59</span>
+                    </div>
+                  </div>
+                </div>
+                <div
+                  class="filter-item"
+                  @click="toggleFilterCheckbox('afternoonIn')"
+                >
+                  <div class="filter-item-left">
+                    <div
+                      class="filter-checkbox"
+                      :class="{ checked: filters.afternoonIn }"
+                    ></div>
+                    <div class="time-slot">
+                      <span class="filter-label">Afternoon</span>
+                      <span class="time-range">12:00-17:59</span>
+                    </div>
+                  </div>
+                </div>
+                <div
+                  class="filter-item"
+                  @click="toggleFilterCheckbox('eveningIn')"
+                >
+                  <div class="filter-item-left">
+                    <div
+                      class="filter-checkbox"
+                      :class="{ checked: filters.eveningIn }"
+                    ></div>
+                    <div class="time-slot">
+                      <span class="filter-label">Evening</span>
+                      <span class="time-range">18:00-23:59</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Facilities -->
+          <div class="filter-section">
+            <div
+              class="filter-title"
+              @click="toggleFilterSection('facilities')"
+            >
+              Facilities
+              <svg
+                class="arrow"
+                :class="{ collapsed: !expandedSections.facilities }"
+                viewBox="0 0 24 24"
+              >
+                <path d="M7 10l5 5 5-5z" />
+              </svg>
+            </div>
+            <div
+              class="filter-content"
+              :class="{ collapsed: !expandedSections.facilities }"
+            >
+              <div class="filter-list">
+                <div
+                  v-for="facility in facilities"
+                  :key="facility.name"
+                  class="filter-item"
+                  @click="toggleFacility(facility.name)"
+                >
+                  <div class="filter-item-left">
+                    <div
+                      class="filter-checkbox"
+                      :class="{
+                        checked: filters.facilities.includes(facility.name),
+                      }"
+                    ></div>
+                    <span class="filter-label">{{ facility.name }}</span>
+                  </div>
+                  <div class="filter-count" v-if="facility.count">
+                    {{ facility.count }}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Pool -->
+          <div class="filter-section">
+            <div class="filter-title" @click="toggleFilterSection('pool')">
+              Pool
+              <svg
+                class="arrow"
+                :class="{ collapsed: !expandedSections.pool }"
+                viewBox="0 0 24 24"
+              >
+                <path d="M7 10l5 5 5-5z" />
+              </svg>
+            </div>
+            <div
+              class="filter-content"
+              :class="{ collapsed: !expandedSections.pool }"
+            >
+              <div class="filter-list">
+                <div
+                  v-for="pool in poolOptions"
+                  :key="pool.name"
+                  class="filter-item"
+                  @click="togglePool(pool.name)"
+                >
+                  <div class="filter-item-left">
+                    <div
+                      class="filter-checkbox"
+                      :class="{
+                        checked: filters.pools.includes(pool.name),
+                      }"
+                    ></div>
+                    <span class="filter-label">{{ pool.name }}</span>
+                  </div>
+                  <div class="filter-count" v-if="pool.count">
+                    {{ pool.count }}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Kids -->
+          <div class="filter-section">
+            <div class="filter-title" @click="toggleFilterSection('kids')">
+              <div class="title-left">
+                <span>Kids</span>
+              </div>
+              <svg
+                class="arrow"
+                :class="{ collapsed: !expandedSections.kids }"
+                viewBox="0 0 24 24"
+              >
+                <path d="M7 10l5 5 5-5z" />
+              </svg>
+            </div>
+            <div
+              class="filter-content"
+              :class="{ collapsed: !expandedSections.kids }"
+            >
+              <div class="filter-list">
+                <div
+                  v-for="kid in kidsOptions"
+                  :key="kid.name"
+                  class="filter-item"
+                  @click="toggleKids(kid.name)"
+                >
+                  <div class="filter-item-left">
+                    <div
+                      class="filter-checkbox"
+                      :class="{
+                        checked: filters.kids.includes(kid.name),
+                      }"
+                    ></div>
+                    <span class="filter-label">{{ kid.name }}</span>
+                  </div>
+                  <div class="filter-count" v-if="kid.count">
+                    {{ kid.count }}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
 
         <!-- Hotel Listings -->
         <div class="hotel-list">
-          <div v-for="hotel in sortedHotels" :key="hotel.id" class="hotel-card">
-            <div class="hotel-image">
-              <img :src="hotel.image" :alt="hotel.name" />
-              <div class="image-counter">1/{{ hotel.imageCount }}</div>
-            </div>
-            <div class="hotel-info">
-              <div class="hotel-header">
-                <div>
-                  <h3 class="hotel-name">{{ hotel.name }}</h3>
-                  <div class="hotel-stars">
-                    {{ generateStars(hotel.stars) }}
-                  </div>
-                  <div class="hotel-location">
-                    {{ hotel.location }} • {{ hotel.category }}
-                  </div>
-                </div>
-                <div class="heart-icon" @click="toggleFavorite(hotel.id)">
-                  {{ favorites.includes(hotel.id) ? "❤️" : "♡" }}
-                </div>
-              </div>
+          <div class="hotel-grid">
+            <div
+              v-for="hotel in sortedHotels"
+              :key="hotel.id"
+              class="hotel-card-new"
+            >
+              <div class="hotel-image-container">
+                <img :src="hotel.image" :alt="hotel.name" />
 
-              <div class="hotel-rating">
-                <div
-                  v-for="n in Math.floor(hotel.rating)"
-                  :key="n"
-                  class="rating-circle"
-                ></div>
-                <span class="rating-text"
-                  >{{ hotel.reviews.toLocaleString() }} reviews</span
-                >
-              </div>
+                <!-- Free child stay badge -->
+                <div class="free-child-badge">Free child stay</div>
 
-              <div class="hotel-details">
-                <span>📅 {{ hotel.dates }}</span>
-                <span
-                  >{{ getBoardBasisIcon(hotel.boardBasis) }}
-                  {{ hotel.boardBasis }}</span
-                >
-                <span v-if="hotel.flightsIncluded">✈️ Flights included ⌄</span>
-              </div>
-
-              <div class="hotel-pricing">
-                <div class="pricing-left">
-                  <div class="deposit-info">{{ hotel.deposit }}</div>
-                  <div class="save-badge" v-if="hotel.savings">
+                <!-- Save amount and rating circles in bottom section -->
+                <div class="image-bottom-info">
+                  <div class="save-amount" v-if="hotel.savings">
                     {{ hotel.savings }}
                   </div>
-                </div>
-                <div class="pricing-right">
-                  <div class="original-price" v-if="hotel.originalPrice">
-                    {{ hotel.originalPrice }}
-                  </div>
-                  <div class="current-price">
-                    {{ hotel.currentPrice }}
-                    <span class="price-note">{{ hotel.priceNote }}</span>
+                  <div class="rating-circles">
+                    <div
+                      v-for="i in 5"
+                      :key="i"
+                      class="rating-circle"
+                      :class="
+                        i <= Math.floor(hotel.rating)
+                          ? 'circle-filled'
+                          : 'circle-empty'
+                      "
+                    ></div>
                   </div>
                 </div>
               </div>
 
-              <button class="view-deal-btn" @click="viewDeal(hotel)">
-                <svg
-                  width="24"
-                  height="24"
-                  version="1.1"
-                  viewBox="0 0 48 48"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="m23.349 16.244c0.06372-0.00125 0.12744-0.0025 0.18991-0.0025 1.8679 0 3.627 0.71375 4.9677 2.0212 1.3868 1.3525 2.1502 3.1638 2.1502 5.1 0 3.9288-3.1935 7.11-7.1317 7.1225-1.7767 0.00625-7.1054 0.045-7.1054 0.045v-6.9538c0-3.945 3.1085-7.2325 6.9293-7.3325m21.987-3.6525c-1.7442-3.0562-4.0494-5.5625-6.8518-7.45-2.74-1.8438-5.8548-3.1825-9.2582-3.9775-3.3035-0.77375-6.6331-1.1638-9.8979-1.1638h-19.328l0.099953 19.25c0.02124 4.2675 1.7055 8.2712 4.739 11.272 1.9766 1.955 4.373 3.3312 6.9817 4.0475 2.3139 0.445 4.4042 0.5525 4.6253 0.5625l7.0917-0.04625c6.462 0 11.718-5.2588 11.718-11.724 0-3.1875-1.2569-6.1688-3.5396-8.395-2.2814-2.225-5.295-3.405-8.486-3.3238-6.2908 0.16125-11.41 5.515-11.41 11.932v6.1438c-1.3844-0.55625-2.6563-1.3888-3.7495-2.4688-2.159-2.1375-3.3572-4.9875-3.3734-8.0262l-0.073715-14.625h14.704c2.9124 0 5.891 0.35125 8.8521 1.0438 2.8574 0.6675 5.4612 1.7838 7.7364 3.315 2.2102 1.4888 4.0356 3.4788 5.425 5.9125 1.3669 2.395 2.059 5.4662 2.059 9.1288 0 3.3762-0.69093 6.2888-2.0553 8.66-1.3981 2.4312-3.2347 4.4512-5.4599 6.0038-2.2864 1.595-4.9027 2.7925-7.7739 3.5575-2.9399 0.78125-5.8947 1.1788-8.7834 1.1788h-2.9074v-5.6625c-0.79088-0.03-3.4284-0.27125-4.6003-0.5675l0.0012495 10.83h7.5065c3.2885 0 6.6419-0.44875 9.9666-1.3338 3.3909-0.90125 6.4945-2.3238 9.2219-4.2288 2.7849-1.9425 5.0776-4.46 6.8156-7.4825 1.7704-3.0775 2.6675-6.765 2.6675-10.955 0-4.4725-0.89583-8.31-2.6638-11.409"
-                    fill-rule="evenodd"
-                  />
-                </svg>
-                View deal
-              </button>
+              <div class="hotel-content-new">
+                <h3 class="hotel-name-new">{{ hotel.name }}</h3>
+
+                <div class="hotel-location-new">{{ hotel.location }}</div>
+
+                <div class="hotel-separator"></div>
+
+                <div class="hotel-bottom">
+                  <div class="hotel-pricing-new">
+                    <div class="price-label">From</div>
+                    <div class="current-price-new">
+                      {{ hotel.currentPrice }}
+                      <span class="price-note-new">{{ hotel.priceNote }}</span>
+                    </div>
+                  </div>
+
+                  <button class="discover-btn" @click="viewDeal(hotel)">
+                    Discover
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                      <path
+                        d="M5 12H19M19 12L12 5M19 12L12 19"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      />
+                    </svg>
+                  </button>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -447,28 +873,46 @@ export default {
       priceToggle: false,
       hotels: [],
       filteredHotels: [],
-      favorites: [],
 
       // Filter states
       filters: {
         fiveStar: true,
         fourPlusRating: false,
         beach: false,
+        exclusive: false,
+        freeChildStays: false,
         stars: [5],
         boardBasis: [],
         maxPrice: 5000,
         resorts: ["Jumeirah Beach"],
         holidayTypes: [],
+        tripadvisorScore: "any",
+        morningOut: false,
+        afternoonOut: false,
+        eveningOut: false,
+        morningIn: false,
+        afternoonIn: false,
+        eveningIn: false,
+        facilities: [],
+        pools: [],
+        kids: [],
       },
 
-      // Expanded sections
+      // Expanded sections - All open by default
       expandedSections: {
         popular: true,
+        promotions: true,
         starRating: true,
         boardBasis: true,
         maxPrice: true,
         popularResorts: true,
         holidayType: true,
+        tripadvisor: true,
+        outboundTimes: true,
+        inboundTimes: true,
+        facilities: true,
+        pool: true,
+        kids: true,
       },
 
       // Filter options
@@ -504,6 +948,33 @@ export default {
         { name: "Luxury Hotels", count: 5 },
         { name: "Spa and Relaxation", count: 2 },
       ],
+
+      facilities: [
+        { name: "Air Conditioning", count: 13 },
+        { name: "Bar", count: 8 },
+        { name: "Beauty Treatments", count: 6 },
+        { name: "Disabled Facilities", count: null },
+        { name: "Gym", count: 5 },
+        { name: "Massage", count: 6 },
+        { name: "Satellite TV", count: 2 },
+        { name: "WiFi", count: 8 },
+      ],
+
+      poolOptions: [
+        { name: "Indoor Pool", count: null },
+        { name: "Infinity Pool", count: null },
+        { name: "Kids Pool", count: 3 },
+        { name: "Outdoor Pool", count: null },
+        { name: "Pool Bar", count: 4 },
+      ],
+
+      kidsOptions: [
+        { name: "Kids Club", count: 14 },
+        { name: "Kids Pool", count: 3 },
+        { name: "Playground", count: 12 },
+        { name: "Theme Parks", count: null },
+        { name: "Water Slides", count: 5 },
+      ],
     };
   },
 
@@ -513,11 +984,6 @@ export default {
       const data = await response.json();
       this.hotels = data.hotels;
       this.applyFilters();
-
-      // Initialize slider progress
-      this.$nextTick(() => {
-        this.updatePriceRange();
-      });
     } catch (error) {
       console.error("Failed to load hotels:", error);
       this.hotels = [];
@@ -630,6 +1096,12 @@ export default {
         filtered = filtered.filter((hotel) => hotel.rating >= 4.0);
       }
 
+      // Tripadvisor score filter
+      if (this.filters.tripadvisorScore !== "any") {
+        const minScore = parseFloat(this.filters.tripadvisorScore);
+        filtered = filtered.filter((hotel) => hotel.rating >= minScore);
+      }
+
       this.filteredHotels = filtered;
     },
 
@@ -642,22 +1114,17 @@ export default {
     },
 
     viewDeal(hotel) {
-      alert(
-        `Viewing deal for ${hotel.name} - ${hotel.currentPrice} ${hotel.priceNote}`
-      );
-    },
-
-    toggleFavorite(hotelId) {
-      const index = this.favorites.indexOf(hotelId);
-      if (index > -1) {
-        this.favorites.splice(index, 1);
-      } else {
-        this.favorites.push(hotelId);
-      }
+      // Navigate to hotel detail page
+      this.$router.push(`/hotel-detail?hotelId=${hotel.id}`);
     },
 
     toggleFilterSection(section) {
       this.expandedSections[section] = !this.expandedSections[section];
+    },
+
+    toggleFilterCheckbox(filterName) {
+      this.filters[filterName] = !this.filters[filterName];
+      this.applyFilters();
     },
 
     toggleStarFilter(stars) {
@@ -700,37 +1167,45 @@ export default {
       this.applyFilters();
     },
 
-    updatePriceRange() {
-      const slider = document.getElementById("priceRange");
-      if (slider) {
-        const progress = ((this.filters.maxPrice - 200) / (5000 - 200)) * 100;
-        slider.parentElement.style.setProperty(
-          "--slider-progress",
-          `${progress}%`
-        );
+    toggleFacility(facility) {
+      const index = this.filters.facilities.indexOf(facility);
+      if (index > -1) {
+        this.filters.facilities.splice(index, 1);
+      } else {
+        this.filters.facilities.push(facility);
       }
       this.applyFilters();
     },
 
-    generateStars(stars) {
-      return "★".repeat(stars);
+    togglePool(pool) {
+      const index = this.filters.pools.indexOf(pool);
+      if (index > -1) {
+        this.filters.pools.splice(index, 1);
+      } else {
+        this.filters.pools.push(pool);
+      }
+      this.applyFilters();
     },
 
-    getBoardBasisIcon(boardBasis) {
-      switch (boardBasis.toLowerCase()) {
-        case "breakfast included":
-          return "🍽️";
-        case "all inclusive":
-          return "🍽️";
-        case "full board":
-          return "🍽️";
-        case "room only":
-          return "🏨";
-        case "self catering":
-          return "🍳";
-        default:
-          return "🍽️";
+    toggleKids(kid) {
+      const index = this.filters.kids.indexOf(kid);
+      if (index > -1) {
+        this.filters.kids.splice(index, 1);
+      } else {
+        this.filters.kids.push(kid);
       }
+      this.applyFilters();
+    },
+
+    toggleRadio(group, value) {
+      if (group === "tripadvisor") {
+        this.filters.tripadvisorScore = value;
+        this.applyFilters();
+      }
+    },
+
+    updatePriceRange() {
+      this.applyFilters();
     },
 
     getStarCount(stars) {
@@ -741,7 +1216,7 @@ export default {
 </script>
 
 <style scoped>
-/* Styles are handled by the main.css file */
+/* Component-specific overrides only */
 .search-area {
   padding: 0;
 }
@@ -762,5 +1237,15 @@ export default {
 
 .arrow {
   transition: transform 0.3s ease;
+}
+
+.time-slot {
+  display: flex;
+  flex-direction: column;
+}
+
+.time-range {
+  font-size: 11px;
+  color: #999;
 }
 </style>
