@@ -1089,6 +1089,7 @@ export default {
 
 .filter-content {
   max-height: 300px;
+  overflow-y: auto;
   transition: max-height 0.3s ease-out;
 }
 
