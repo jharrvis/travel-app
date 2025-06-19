@@ -4,7 +4,8 @@
     <div class="container">
       <div class="search-form">
         <div class="form-row">
-          <div class="form-group">
+          <!-- Destination input -->
+          <div class="form-group destination-wide">
             <label>Destination(s) or Hotel name</label>
             <div class="location-input">
               <input
@@ -15,6 +16,8 @@
               />
             </div>
           </div>
+
+          <!-- Departure Airport -->
           <div class="form-group">
             <label>Departure airport</label>
             <select v-model="departureAirport">
@@ -25,21 +28,39 @@
               <option value="BHX">Birmingham</option>
             </select>
           </div>
+
+          <!-- When (Date Range) -->
           <div class="form-group">
             <label>When</label>
             <input
-              type="text"
+              type="date"
               v-model="departureDate"
-              placeholder="Select dates"
+              placeholder="Start date"
             />
           </div>
+
+          <!-- How Long -->
           <div class="form-group">
             <label>How long</label>
-            <input type="text" v-model="duration" placeholder="Duration" />
+            <select v-model="duration">
+              <option value="">Select duration</option>
+              <option value="3 nights">3 nights</option>
+              <option value="5 nights">5 nights</option>
+              <option value="7 nights">7 nights</option>
+              <option value="10 nights">10 nights</option>
+              <option value="14 nights">14 nights</option>
+            </select>
           </div>
+
+          <!-- Rooms -->
           <div class="form-group">
             <label>Room(s)</label>
-            <input type="text" v-model="rooms" placeholder="Rooms & guests" />
+            <select v-model="rooms">
+              <option value="1 Room / 2 Adults">1 Room / 2 Adults</option>
+              <option value="1 Room / 1 Adult">1 Room / 1 Adult</option>
+              <option value="2 Rooms / 4 Adults">2 Rooms / 4 Adults</option>
+              <option value="2 Rooms / Family">2 Rooms / Family</option>
+            </select>
           </div>
         </div>
       </div>
@@ -896,6 +917,19 @@ export default {
         facilities: [],
         pools: [],
         kids: [],
+      },
+
+      props: [
+        "searchQuery",
+        "departureAirport",
+        "departureDate",
+        "duration",
+        "rooms",
+      ],
+      methods: {
+        filterHotels() {
+          this.$emit("filter-hotels");
+        },
       },
 
       // Expanded sections - All open by default
