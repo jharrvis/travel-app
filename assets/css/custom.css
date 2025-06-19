@@ -311,6 +311,9 @@
   outline: none;
   -webkit-appearance: none;
   appearance: none;
+  /* fix position */
+  position: relative;
+  z-index: 2;
 }
 
 .price-slider::-webkit-slider-thumb {
@@ -323,6 +326,7 @@
   cursor: pointer;
   border: 2px solid white;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  z-index: 3;
 }
 
 .price-slider::-moz-range-thumb {
