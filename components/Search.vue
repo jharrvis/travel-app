@@ -1,70 +1,11 @@
 <template>
   <div class="search-area">
-    <!-- Search Form -->
-    <div class="container">
-      <div class="search-form">
-        <div class="form-row">
-          <!-- Destination input -->
-          <div class="form-group destination-wide">
-            <label>Destination(s) or Hotel name</label>
-            <div class="location-input">
-              <input
-                type="text"
-                v-model="searchQuery"
-                placeholder="Enter destination"
-                @input="filterHotels"
-              />
-            </div>
-          </div>
-
-          <!-- Departure Airport -->
-          <div class="form-group">
-            <label>Departure airport</label>
-            <select v-model="departureAirport">
-              <option value="">Any airport</option>
-              <option value="LHR">London Heathrow</option>
-              <option value="LGW">London Gatwick</option>
-              <option value="MAN">Manchester</option>
-              <option value="BHX">Birmingham</option>
-            </select>
-          </div>
-
-          <!-- When (Date Range) -->
-          <div class="form-group">
-            <label>When</label>
-            <input
-              type="date"
-              v-model="departureDate"
-              placeholder="Start date"
-            />
-          </div>
-
-          <!-- How Long -->
-          <div class="form-group">
-            <label>How long</label>
-            <select v-model="duration">
-              <option value="">Select duration</option>
-              <option value="3 nights">3 nights</option>
-              <option value="5 nights">5 nights</option>
-              <option value="7 nights">7 nights</option>
-              <option value="10 nights">10 nights</option>
-              <option value="14 nights">14 nights</option>
-            </select>
-          </div>
-
-          <!-- Rooms -->
-          <div class="form-group">
-            <label>Room(s)</label>
-            <select v-model="rooms">
-              <option value="1 Room / 2 Adults">1 Room / 2 Adults</option>
-              <option value="1 Room / 1 Adult">1 Room / 1 Adult</option>
-              <option value="2 Rooms / 4 Adults">2 Rooms / 4 Adults</option>
-              <option value="2 Rooms / Family">2 Rooms / Family</option>
-            </select>
-          </div>
-        </div>
-      </div>
-    </div>
+    <!-- Search Form Component -->
+    <SearchForm
+      :initial-search-data="searchFormData"
+      @search="handleSearch"
+      @search-data-change="handleSearchDataChange"
+    />
 
     <!-- Results Header -->
     <div class="container">
@@ -541,144 +482,6 @@
             </div>
           </div>
 
-          <!-- Outbound Times -->
-          <div class="filter-section">
-            <div
-              class="filter-title"
-              @click="toggleFilterSection('outboundTimes')"
-            >
-              Outbound times
-              <svg
-                class="arrow"
-                :class="{ collapsed: !expandedSections.outboundTimes }"
-                viewBox="0 0 24 24"
-              >
-                <path d="M7 10l5 5 5-5z" />
-              </svg>
-            </div>
-            <div
-              class="filter-content"
-              :class="{ collapsed: !expandedSections.outboundTimes }"
-            >
-              <div class="filter-list">
-                <div
-                  class="filter-item"
-                  @click="toggleFilterCheckbox('morningOut')"
-                >
-                  <div class="filter-item-left">
-                    <div
-                      class="filter-checkbox"
-                      :class="{ checked: filters.morningOut }"
-                    ></div>
-                    <div class="time-slot">
-                      <span class="filter-label">Morning</span>
-                      <span class="time-range">06:00-11:59</span>
-                    </div>
-                  </div>
-                </div>
-                <div
-                  class="filter-item"
-                  @click="toggleFilterCheckbox('afternoonOut')"
-                >
-                  <div class="filter-item-left">
-                    <div
-                      class="filter-checkbox"
-                      :class="{ checked: filters.afternoonOut }"
-                    ></div>
-                    <div class="time-slot">
-                      <span class="filter-label">Afternoon</span>
-                      <span class="time-range">12:00-17:59</span>
-                    </div>
-                  </div>
-                </div>
-                <div
-                  class="filter-item"
-                  @click="toggleFilterCheckbox('eveningOut')"
-                >
-                  <div class="filter-item-left">
-                    <div
-                      class="filter-checkbox"
-                      :class="{ checked: filters.eveningOut }"
-                    ></div>
-                    <div class="time-slot">
-                      <span class="filter-label">Evening</span>
-                      <span class="time-range">18:00-23:59</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Inbound Times -->
-          <div class="filter-section">
-            <div
-              class="filter-title"
-              @click="toggleFilterSection('inboundTimes')"
-            >
-              Inbound times
-              <svg
-                class="arrow"
-                :class="{ collapsed: !expandedSections.inboundTimes }"
-                viewBox="0 0 24 24"
-              >
-                <path d="M7 10l5 5 5-5z" />
-              </svg>
-            </div>
-            <div
-              class="filter-content"
-              :class="{ collapsed: !expandedSections.inboundTimes }"
-            >
-              <div class="filter-list">
-                <div
-                  class="filter-item"
-                  @click="toggleFilterCheckbox('morningIn')"
-                >
-                  <div class="filter-item-left">
-                    <div
-                      class="filter-checkbox"
-                      :class="{ checked: filters.morningIn }"
-                    ></div>
-                    <div class="time-slot">
-                      <span class="filter-label">Morning</span>
-                      <span class="time-range">00:00-11:59</span>
-                    </div>
-                  </div>
-                </div>
-                <div
-                  class="filter-item"
-                  @click="toggleFilterCheckbox('afternoonIn')"
-                >
-                  <div class="filter-item-left">
-                    <div
-                      class="filter-checkbox"
-                      :class="{ checked: filters.afternoonIn }"
-                    ></div>
-                    <div class="time-slot">
-                      <span class="filter-label">Afternoon</span>
-                      <span class="time-range">12:00-17:59</span>
-                    </div>
-                  </div>
-                </div>
-                <div
-                  class="filter-item"
-                  @click="toggleFilterCheckbox('eveningIn')"
-                >
-                  <div class="filter-item-left">
-                    <div
-                      class="filter-checkbox"
-                      :class="{ checked: filters.eveningIn }"
-                    ></div>
-                    <div class="time-slot">
-                      <span class="filter-label">Evening</span>
-                      <span class="time-range">18:00-23:59</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
           <!-- Facilities -->
           <div class="filter-section">
             <div
@@ -871,6 +674,17 @@
               </div>
             </div>
           </div>
+
+          <!-- No Results -->
+          <div v-if="filteredHotels.length === 0" class="no-results">
+            <div class="no-results-content">
+              <h3>No hotels found</h3>
+              <p>Try adjusting your search criteria or filters</p>
+              <button @click="resetFilters" class="reset-filters-btn">
+                Reset All Filters
+              </button>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -881,15 +695,30 @@
 </template>
 
 <script>
+import SearchForm from "@/components/SearchForm.vue";
+
 export default {
   name: "SearchComponent",
+  components: {
+    SearchForm,
+  },
   data() {
     return {
-      searchQuery: "Dubai",
-      departureAirport: "",
-      departureDate: "Nov 2025",
-      duration: "5 nights",
-      rooms: "1 Room / 2 Adults",
+      // Search form data
+      searchFormData: {
+        destination: "Dubai",
+        departureAirport: "",
+        startDate: "",
+        endDate: "",
+        rooms: [
+          {
+            adults: 2,
+            children: 0,
+            childrenAges: [],
+          },
+        ],
+      },
+
       sortBy: "recommended",
       priceToggle: false,
       hotels: [],
@@ -908,28 +737,9 @@ export default {
         resorts: ["Jumeirah Beach"],
         holidayTypes: [],
         tripadvisorScore: "any",
-        morningOut: false,
-        afternoonOut: false,
-        eveningOut: false,
-        morningIn: false,
-        afternoonIn: false,
-        eveningIn: false,
         facilities: [],
         pools: [],
         kids: [],
-      },
-
-      props: [
-        "searchQuery",
-        "departureAirport",
-        "departureDate",
-        "duration",
-        "rooms",
-      ],
-      methods: {
-        filterHotels() {
-          this.$emit("filter-hotels");
-        },
       },
 
       // Expanded sections - All open by default
@@ -942,8 +752,6 @@ export default {
         popularResorts: true,
         holidayType: true,
         tripadvisor: true,
-        outboundTimes: true,
-        inboundTimes: true,
         facilities: true,
         pool: true,
         kids: true,
@@ -1027,7 +835,11 @@ export default {
 
   computed: {
     resultsTitle() {
-      return `${this.filteredHotels.length} holidays found`;
+      const destination = this.searchFormData.destination || "hotels";
+      const duration = this.getDurationText();
+      return `${this.filteredHotels.length} ${destination} holidays found${
+        duration ? ` for ${duration}` : ""
+      }`;
     },
 
     sortedHotels() {
@@ -1067,16 +879,46 @@ export default {
   },
 
   methods: {
-    filterHotels() {
+    // Search Form Handlers
+    handleSearch(searchData) {
+      console.log("Performing search with:", searchData);
+      this.searchFormData = { ...searchData };
       this.applyFilters();
+
+      // You can add navigation logic here
+      // this.$router.push({ query: { ...searchData } });
+    },
+
+    handleSearchDataChange(searchData) {
+      this.searchFormData = { ...searchData };
+      // Optionally apply filters in real-time
+      // this.applyFilters();
+    },
+
+    getDurationText() {
+      if (!this.searchFormData.startDate || !this.searchFormData.endDate) {
+        return "";
+      }
+
+      const start = new Date(this.searchFormData.startDate);
+      const end = new Date(this.searchFormData.endDate);
+      const diffTime = Math.abs(end - start);
+      const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+      if (diffDays === 0) return "same day";
+      if (diffDays === 1) return "1 night";
+      return `${diffDays} nights`;
     },
 
     applyFilters() {
       let filtered = [...this.hotels];
 
       // Search query filter
-      if (this.searchQuery.trim()) {
-        const query = this.searchQuery.toLowerCase();
+      if (
+        this.searchFormData.destination &&
+        this.searchFormData.destination.trim()
+      ) {
+        const query = this.searchFormData.destination.toLowerCase();
         filtered = filtered.filter(
           (hotel) =>
             hotel.name.toLowerCase().includes(query) ||
@@ -1150,6 +992,26 @@ export default {
     viewDeal(hotel) {
       // Navigate to hotel detail page
       this.$router.push(`/hotel-detail?hotelId=${hotel.id}`);
+    },
+
+    resetFilters() {
+      this.filters = {
+        fiveStar: false,
+        fourPlusRating: false,
+        beach: false,
+        exclusive: false,
+        freeChildStays: false,
+        stars: [],
+        boardBasis: [],
+        maxPrice: 5000,
+        resorts: [],
+        holidayTypes: [],
+        tripadvisorScore: "any",
+        facilities: [],
+        pools: [],
+        kids: [],
+      };
+      this.applyFilters();
     },
 
     toggleFilterSection(section) {
@@ -1255,6 +1117,121 @@ export default {
   padding: 0;
 }
 
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.results-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 30px 0;
+  border-bottom: 1px solid #eee;
+  margin-bottom: 30px;
+}
+
+.results-title {
+  font-size: 24px;
+  font-weight: 600;
+  color: #333;
+  margin: 0;
+}
+
+.sort-controls {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.sort-controls span {
+  color: #666;
+  font-weight: 500;
+}
+
+.sort-dropdown {
+  padding: 8px 12px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  background: white;
+  cursor: pointer;
+}
+
+.map-btn {
+  padding: 8px 16px;
+  background: #f8f9fa;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.2s;
+}
+
+.map-btn:hover {
+  background: #e9ecef;
+}
+
+.content-wrapper {
+  display: flex;
+  gap: 30px;
+}
+
+.sidebar {
+  width: 280px;
+  flex-shrink: 0;
+}
+
+.hotel-list {
+  flex: 1;
+  min-width: 0;
+}
+
+.hotel-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
+}
+
+.no-results {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 300px;
+}
+
+.no-results-content {
+  text-align: center;
+  padding: 40px;
+}
+
+.no-results-content h3 {
+  font-size: 24px;
+  color: #333;
+  margin-bottom: 16px;
+}
+
+.no-results-content p {
+  color: #666;
+  margin-bottom: 24px;
+  font-size: 16px;
+}
+
+.reset-filters-btn {
+  background: #ac7872;
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.reset-filters-btn:hover {
+  background: #8b5f5a;
+}
+
 .filter-title.collapsed .arrow {
   transform: rotate(-90deg);
 }
@@ -1273,13 +1250,40 @@ export default {
   transition: transform 0.3s ease;
 }
 
-.time-slot {
-  display: flex;
-  flex-direction: column;
+/* Responsive Design */
+@media (max-width: 1200px) {
+  .content-wrapper {
+    flex-direction: column;
+  }
+
+  .sidebar {
+    width: 100%;
+    margin-bottom: 30px;
+  }
+
+  .hotel-grid {
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  }
 }
 
-.time-range {
-  font-size: 11px;
-  color: #999;
+@media (max-width: 768px) {
+  .results-header {
+    flex-direction: column;
+    gap: 15px;
+    align-items: flex-start;
+  }
+
+  .sort-controls {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .hotel-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .container {
+    padding: 0 15px;
+  }
 }
 </style>
