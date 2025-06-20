@@ -22,7 +22,7 @@
     <!-- Hotel Grid -->
     <div class="hotel-grid">
       <HotelCard
-        v-for="hotel in hotels"
+        v-for="hotel in paginatedHotels"
         :key="hotel.id"
         :hotel="hotel"
         @hotel-click="$emit('hotel-click', hotel)"
@@ -30,13 +30,52 @@
     </div>
 
     <!-- No Results -->
-    <div v-if="hotels.length === 0" class="no-results">
+    <div v-if="paginatedHotels.length === 0" class="no-results">
       <div class="no-results-content">
         <h3>No hotels found</h3>
         <p>Try adjusting your search criteria or filters</p>
         <button @click="$emit('reset-filters')" class="reset-filters-btn">
           Reset All Filters
         </button>
+      </div>
+    </div>
+
+    <!-- Pagination -->
+    <div class="pagination-container" v-if="totalPages > 1">
+      <div class="pagination">
+        <button
+          class="pagination-btn"
+          :disabled="currentPage === 1"
+          @click="goToPage(currentPage - 1)"
+        >
+          ‹
+        </button>
+
+        <button
+          v-for="page in visiblePages"
+          :key="page"
+          class="pagination-btn"
+          :class="{ active: currentPage === page }"
+          @click="goToPage(page)"
+          :disabled="page === '...'"
+        >
+          {{ page }}
+        </button>
+
+        <button
+          class="pagination-btn"
+          :disabled="currentPage === totalPages"
+          @click="goToPage(currentPage + 1)"
+        >
+          ›
+        </button>
+      </div>
+
+      <div class="pagination-info">
+        Showing {{ (currentPage - 1) * itemsPerPage + 1 }}-{{
+          Math.min(currentPage * itemsPerPage, hotels.length)
+        }}
+        of {{ hotels.length }} hotels
       </div>
     </div>
   </div>
@@ -73,6 +112,12 @@ export default {
     },
   },
   emits: ["hotel-click", "sort-change", "show-map", "reset-filters"],
+  data() {
+    return {
+      currentPage: 1,
+      itemsPerPage: 12,
+    };
+  },
   computed: {
     resultsTitle() {
       const destination = this.searchData.destination || "hotels";
@@ -80,6 +125,52 @@ export default {
       return `${this.hotels.length} ${destination} holidays found${
         duration ? ` for ${duration}` : ""
       }`;
+    },
+
+    paginatedHotels() {
+      const start = (this.currentPage - 1) * this.itemsPerPage;
+      const end = start + this.itemsPerPage;
+      return this.hotels.slice(start, end);
+    },
+
+    totalPages() {
+      return Math.ceil(this.hotels.length / this.itemsPerPage);
+    },
+
+    visiblePages() {
+      const pages = [];
+      const total = this.totalPages;
+      const current = this.currentPage;
+
+      if (total <= 5) {
+        for (let i = 1; i <= total; i++) {
+          pages.push(i);
+        }
+      } else {
+        if (current <= 3) {
+          for (let i = 1; i <= 5; i++) {
+            pages.push(i);
+          }
+          pages.push("...");
+          pages.push(total);
+        } else if (current >= total - 2) {
+          pages.push(1);
+          pages.push("...");
+          for (let i = total - 4; i <= total; i++) {
+            pages.push(i);
+          }
+        } else {
+          pages.push(1);
+          pages.push("...");
+          for (let i = current - 1; i <= current + 1; i++) {
+            pages.push(i);
+          }
+          pages.push("...");
+          pages.push(total);
+        }
+      }
+
+      return pages;
     },
   },
   methods: {
@@ -96,6 +187,23 @@ export default {
       if (diffDays === 0) return "same day";
       if (diffDays === 1) return "1 night";
       return `${diffDays} nights`;
+    },
+
+    goToPage(page) {
+      if (page >= 1 && page <= this.totalPages && page !== "...") {
+        this.currentPage = page;
+        // Scroll to top of hotel list when page changes
+        this.$nextTick(() => {
+          this.$el.scrollIntoView({ behavior: "smooth", block: "start" });
+        });
+      }
+    },
+  },
+
+  watch: {
+    hotels() {
+      // Reset to first page when hotels data changes (e.g., filters applied)
+      this.currentPage = 1;
     },
   },
 };
@@ -202,6 +310,62 @@ export default {
   background: #8b5f5a;
 }
 
+/* Pagination */
+.pagination-container {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin-top: 40px;
+  padding-top: 30px;
+  border-top: 1px solid #eee;
+  gap: 15px;
+}
+
+.pagination {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.pagination-btn {
+  width: 36px;
+  height: 36px;
+  border: 1px solid #ddd;
+  background: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.3s;
+  text-decoration: none;
+  color: #666;
+}
+
+.pagination-btn:hover:not(:disabled) {
+  border-color: #ac7872;
+  color: #ac7872;
+}
+
+.pagination-btn.active {
+  background: #333;
+  color: white;
+  border-color: #333;
+}
+
+.pagination-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.pagination-info {
+  font-size: 14px;
+  color: #666;
+  text-align: left;
+}
+
 /* Responsive Design */
 @media (max-width: 1200px) {
   .hotel-grid {
@@ -230,6 +394,20 @@ export default {
   .hotel-grid {
     grid-template-columns: 1fr;
     gap: 16px;
+  }
+
+  .pagination-container {
+    margin-top: 30px;
+    padding-top: 20px;
+  }
+
+  .pagination {
+    flex-wrap: wrap;
+    justify-content: flex-start;
+  }
+
+  .pagination-info {
+    font-size: 13px;
   }
 }
 
