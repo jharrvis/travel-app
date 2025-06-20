@@ -3,54 +3,50 @@
     <div class="hotel-image-container">
       <img :src="hotel.image" :alt="hotel.name" class="hotel-image" />
 
-      <!-- Free child stay badge -->
+      <!-- Free child stay badge (top left) -->
       <div class="free-child-badge" v-if="hotel.freeChildStay">
         Free child stay
       </div>
 
-      <!-- Save amount and rating circles in bottom section -->
-      <div class="image-bottom-info">
-        <div class="save-amount" v-if="hotel.savings">
-          {{ hotel.savings }}
-        </div>
-        <div class="rating-circles">
-          <div
-            v-for="i in 5"
-            :key="i"
-            class="rating-circle"
-            :class="
-              i <= Math.floor(hotel.rating) ? 'circle-filled' : 'circle-empty'
-            "
-          ></div>
-        </div>
+      <!-- Rating circles (top right) -->
+      <div class="rating-circles-overlay">
+        <div
+          v-for="i in 5"
+          :key="i"
+          class="rating-circle"
+          :class="
+            i <= Math.floor(hotel.rating) ? 'circle-filled' : 'circle-empty'
+          "
+        ></div>
+      </div>
+
+      <!-- Save amount (bottom left) -->
+      <div class="save-amount" v-if="hotel.savings">
+        {{ hotel.savings }}
       </div>
     </div>
 
     <div class="hotel-content">
-      <div class="hotel-header">
-        <div class="hotel-stars">
-          <span v-for="star in hotel.stars" :key="star" class="star">★</span>
-        </div>
-      </div>
-
+      <!-- Hotel name -->
       <h3 class="hotel-name">{{ hotel.name }}</h3>
 
+      <!-- Hotel location -->
       <div class="hotel-location">{{ hotel.location }}</div>
 
-      <div class="hotel-separator"></div>
-
-      <div class="hotel-bottom">
-        <div class="hotel-pricing">
+      <!-- Price section -->
+      <div class="hotel-pricing-section">
+        <div class="price-container">
           <div class="price-label">From</div>
-          <div class="current-price">
-            {{ hotel.currentPrice }}
+          <div class="price-row">
+            <span class="price-amount">{{ hotel.currentPrice }}</span>
             <span class="price-note">{{ hotel.priceNote }}</span>
           </div>
         </div>
 
+        <!-- Discover button -->
         <button class="discover-btn" @click.stop="$emit('hotel-click', hotel)">
           Discover
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
             <path
               d="M5 12H19M19 12L12 5M19 12L12 19"
               stroke="currentColor"
@@ -101,6 +97,7 @@ export default {
   height: 100%;
   display: flex;
   flex-direction: column;
+  max-width: 380px;
 }
 
 .hotel-card:hover {
@@ -110,7 +107,7 @@ export default {
 
 .hotel-image-container {
   position: relative;
-  height: 200px;
+  height: 220px;
   overflow: hidden;
 }
 
@@ -127,54 +124,52 @@ export default {
 
 .free-child-badge {
   position: absolute;
-  top: 12px;
-  left: 12px;
-  background: #28a745;
+  top: 16px;
+  left: 16px;
+  background: rgba(0, 0, 0, 0.7);
   color: white;
-  padding: 4px 8px;
-  border-radius: 4px;
-  font-size: 11px;
-  font-weight: 600;
-  text-transform: uppercase;
-}
-
-.image-bottom-info {
-  position: absolute;
-  bottom: 12px;
-  left: 12px;
-  right: 12px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.save-amount {
-  background: rgba(220, 53, 69, 0.9);
-  color: white;
-  padding: 4px 8px;
-  border-radius: 4px;
+  padding: 6px 12px;
+  border-radius: 6px;
   font-size: 12px;
-  font-weight: 600;
+  font-weight: 500;
+  backdrop-filter: blur(4px);
 }
 
-.rating-circles {
+.rating-circles-overlay {
+  position: absolute;
+  top: 16px;
+  right: 16px;
   display: flex;
-  gap: 3px;
+  gap: 4px;
 }
 
 .rating-circle {
-  width: 8px;
-  height: 8px;
+  width: 10px;
+  height: 10px;
   border-radius: 50%;
   transition: background-color 0.2s;
 }
 
 .circle-filled {
-  background: #153b3c;
+  background: #ffa500;
 }
 
 .circle-empty {
-  background: rgba(255, 255, 255, 0.7);
+  background: rgba(255, 255, 255, 0.5);
+  backdrop-filter: blur(2px);
+}
+
+.save-amount {
+  position: absolute;
+  bottom: 16px;
+  left: 16px;
+  background: rgba(220, 53, 69, 0.9);
+  color: white;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  backdrop-filter: blur(4px);
 }
 
 .hotel-content {
@@ -184,28 +179,14 @@ export default {
   flex: 1;
 }
 
-.hotel-header {
-  margin-bottom: 8px;
-}
-
-.hotel-stars {
-  color: #ffa500;
-  font-size: 14px;
-}
-
-.star {
-  margin-right: 1px;
-}
-
 .hotel-name {
-  font-size: 18px;
-  font-weight: 600;
+  font-size: 20px;
+  font-weight: 400;
   color: #333;
   margin: 0 0 8px 0;
   line-height: 1.3;
   font-family: "the-seasons", serif;
-  font-weight: 400;
-  min-height: 48px;
+  min-height: 50px;
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
@@ -213,42 +194,41 @@ export default {
 }
 
 .hotel-location {
-  color: #666;
-  font-size: 13px;
-  margin-bottom: 16px;
+  color: #999;
+  font-size: 14px;
   line-height: 1.4;
-  min-height: 36px;
+  margin-bottom: 24px;
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
 
-.hotel-separator {
-  height: 1px;
-  background: #f0f0f0;
-  margin: 16px 0;
-}
-
-.hotel-bottom {
+.hotel-pricing-section {
   margin-top: auto;
   display: flex;
   justify-content: space-between;
   align-items: flex-end;
-  gap: 12px;
 }
 
-.hotel-pricing {
-  flex: 1;
+.price-container {
+  display: flex;
+  flex-direction: column;
 }
 
 .price-label {
-  font-size: 12px;
+  font-size: 14px;
   color: #666;
   margin-bottom: 4px;
 }
 
-.current-price {
+.price-row {
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+}
+
+.price-amount {
   font-size: 24px;
   font-weight: 700;
   color: #333;
@@ -256,31 +236,28 @@ export default {
 }
 
 .price-note {
-  font-size: 14px;
+  font-size: 16px;
   font-weight: 400;
   color: #666;
-  margin-left: 4px;
 }
 
 .discover-btn {
-  background: #153b3c;
-  color: white;
+  background: transparent;
+  color: #ac7872;
   border: none;
-  padding: 10px 16px;
-  border-radius: 6px;
+  padding: 0;
   font-size: 14px;
-  font-weight: 600;
+  font-weight: 500;
   cursor: pointer;
   transition: all 0.2s;
   display: flex;
   align-items: center;
   gap: 6px;
-  white-space: nowrap;
-  flex-shrink: 0;
+  text-decoration: none;
 }
 
 .discover-btn:hover {
-  background: #0f2b2c;
+  color: #8b5f5a;
   transform: translateX(2px);
 }
 
@@ -294,8 +271,12 @@ export default {
 
 /* Responsive Design */
 @media (max-width: 768px) {
+  .hotel-card {
+    max-width: 100%;
+  }
+
   .hotel-image-container {
-    height: 180px;
+    height: 200px;
   }
 
   .hotel-content {
@@ -303,35 +284,37 @@ export default {
   }
 
   .hotel-name {
-    font-size: 16px;
-    min-height: 40px;
+    font-size: 18px;
+    min-height: 44px;
   }
 
   .hotel-location {
-    font-size: 12px;
-    min-height: 32px;
+    font-size: 13px;
+    margin-bottom: 20px;
   }
 
-  .current-price {
-    font-size: 20px;
+  .price-amount {
+    font-size: 22px;
   }
 
   .discover-btn {
-    padding: 8px 12px;
     font-size: 13px;
   }
 }
 
 @media (max-width: 480px) {
-  .hotel-bottom {
+  .hotel-content {
+    padding: 14px;
+  }
+
+  .hotel-pricing-section {
     flex-direction: column;
     align-items: stretch;
     gap: 12px;
   }
 
   .discover-btn {
-    width: 100%;
-    justify-content: center;
+    align-self: flex-end;
   }
 }
 </style>
