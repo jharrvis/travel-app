@@ -83,6 +83,7 @@ export default {
         beach: false,
         exclusive: false,
         freeChildStays: false,
+        topPick: false,
         stars: [5],
         boardBasis: [],
         maxPrice: 5000,
@@ -98,12 +99,17 @@ export default {
 
   async mounted() {
     try {
-      const response = await fetch("/data/hotels.json");
+      const response = await fetch("/data/search-results.json");
       const data = await response.json();
-      this.hotels = data.hotels.map((hotel) => ({
+      console.log("Loaded data:", data); // Debug log
+
+      // ✅ FIX: Menggunakan data.search_results.hotels
+      this.hotels = data.search_results.hotels.map((hotel) => ({
         ...hotel,
-        freeChildStay: Math.random() > 0.7, // Random free child stay for demo
+        freeChildStay: hotel.freeChildStay || Math.random() > 0.7, // Use existing or random
       }));
+
+      console.log("Mapped hotels:", this.hotels); // Debug log
       this.applyFilters();
     } catch (error) {
       console.error("Failed to load hotels:", error);
@@ -119,20 +125,34 @@ export default {
       switch (this.sortBy) {
         case "price-low":
           return hotels.sort((a, b) => {
-            const priceA = parseInt(a.currentPrice.replace(/[£,]/g, ""));
-            const priceB = parseInt(b.currentPrice.replace(/[£,]/g, ""));
+            // ✅ FIX: Support both new and old price structure
+            const priceA =
+              a.pricing?.adult_price ||
+              parseInt((a.currentPrice || "£0").replace(/[£,]/g, ""));
+            const priceB =
+              b.pricing?.adult_price ||
+              parseInt((b.currentPrice || "£0").replace(/[£,]/g, ""));
             return priceA - priceB;
           });
         case "price-high":
           return hotels.sort((a, b) => {
-            const priceA = parseInt(a.currentPrice.replace(/[£,]/g, ""));
-            const priceB = parseInt(b.currentPrice.replace(/[£,]/g, ""));
+            const priceA =
+              a.pricing?.adult_price ||
+              parseInt((a.currentPrice || "£0").replace(/[£,]/g, ""));
+            const priceB =
+              b.pricing?.adult_price ||
+              parseInt((b.currentPrice || "£0").replace(/[£,]/g, ""));
             return priceB - priceA;
           });
         case "rating":
           return hotels.sort((a, b) => b.stars - a.stars);
         default:
-          return hotels;
+          // ✅ FIX: Sort by top_pick first, then by rating
+          return hotels.sort((a, b) => {
+            if (a.top_pick && !b.top_pick) return -1;
+            if (!a.top_pick && b.top_pick) return 1;
+            return b.rating - a.rating;
+          });
       }
     },
   },
@@ -189,17 +209,21 @@ export default {
         );
       }
 
-      // Board basis filter
+      // ✅ FIX: Board basis filter - support new structure
       if (this.filters.boardBasis.length > 0) {
         filtered = filtered.filter((hotel) =>
-          this.filters.boardBasis.includes(hotel.boardBasis)
+          this.filters.boardBasis.includes(
+            hotel.board_basis || hotel.boardBasis
+          )
         );
       }
 
-      // Price filter
+      // ✅ FIX: Price filter - support new pricing structure
       if (this.filters.maxPrice < 5000) {
         filtered = filtered.filter((hotel) => {
-          const price = parseInt(hotel.currentPrice.replace(/[£,]/g, ""));
+          const price =
+            hotel.pricing?.adult_price ||
+            parseInt((hotel.currentPrice || "£0").replace(/[£,]/g, ""));
           return price <= this.filters.maxPrice;
         });
       }
@@ -213,12 +237,16 @@ export default {
         });
       }
 
-      // Beach filter
+      // ✅ FIX: Beach filter - check amenities too
       if (this.filters.beach) {
         filtered = filtered.filter(
           (hotel) =>
             hotel.category.toLowerCase().includes("beach") ||
-            hotel.location.toLowerCase().includes("beach")
+            hotel.location.toLowerCase().includes("beach") ||
+            (hotel.amenities &&
+              hotel.amenities.some((amenity) =>
+                amenity.toLowerCase().includes("beach")
+              ))
         );
       }
 
@@ -237,7 +265,13 @@ export default {
         filtered = filtered.filter((hotel) => hotel.freeChildStay);
       }
 
+      // ✅ FIX: Top pick filter
+      if (this.filters.topPick) {
+        filtered = filtered.filter((hotel) => hotel.top_pick);
+      }
+
       this.filteredHotels = filtered;
+      console.log("Filtered hotels:", this.filteredHotels); // Debug log
     },
 
     resetFilters() {
@@ -247,6 +281,7 @@ export default {
         beach: false,
         exclusive: false,
         freeChildStays: false,
+        topPick: false,
         stars: [],
         boardBasis: [],
         maxPrice: 5000,

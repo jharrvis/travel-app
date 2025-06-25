@@ -19,12 +19,13 @@
       </div>
     </div>
 
-    <!-- Hotel Grid -->
-    <div class="hotel-grid">
+    <!-- Hotel Container - List View Only -->
+    <div class="hotel-container hotel-list-view">
       <HotelCard
         v-for="hotel in paginatedHotels"
         :key="hotel.id"
         :hotel="hotel"
+        :search-data="searchData"
         @hotel-click="$emit('hotel-click', hotel)"
       />
     </div>
@@ -110,15 +111,25 @@ export default {
       type: Object,
       default: () => ({}),
     },
+    initialViewMode: {
+      type: String,
+      default: "list",
+      validator(value) {
+        return ["grid", "list"].includes(value);
+      },
+    },
   },
   emits: ["hotel-click", "sort-change", "show-map", "reset-filters"],
   data() {
     return {
       currentPage: 1,
-      itemsPerPage: 12,
     };
   },
   computed: {
+    itemsPerPage() {
+      return 10; // Fixed for list view
+    },
+
     resultsTitle() {
       const destination = this.searchData.destination || "hotels";
       const duration = this.getDurationText();
@@ -251,6 +262,8 @@ export default {
   font-size: 14px;
 }
 
+/* View Toggle Buttons - Removed */
+
 .map-btn {
   padding: 8px 16px;
   border: 1px solid #ddd;
@@ -258,19 +271,26 @@ export default {
   cursor: pointer;
   font-size: 14px;
   transition: all 0.2s;
+  background: white;
 }
 
 .map-btn:hover {
   background: #e9ecef;
 }
 
-.hotel-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-  gap: 24px;
+/* Hotel Container Styles */
+.hotel-container {
   margin-bottom: 40px;
 }
 
+/* List View Only */
+.hotel-list-view {
+  display: flex;
+  flex-direction: column;
+  gap: 0; /* Remove gap since cards have their own margins */
+}
+
+/* No Results */
 .no-results {
   display: flex;
   justify-content: center;
@@ -367,13 +387,6 @@ export default {
 }
 
 /* Responsive Design */
-@media (max-width: 1200px) {
-  .hotel-grid {
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 20px;
-  }
-}
-
 @media (max-width: 768px) {
   .results-header {
     flex-direction: column;
@@ -389,11 +402,12 @@ export default {
   .sort-controls {
     width: 100%;
     justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 10px;
   }
 
-  .hotel-grid {
-    grid-template-columns: 1fr;
-    gap: 16px;
+  .hotel-list-view {
+    gap: 0;
   }
 
   .pagination-container {
@@ -412,9 +426,19 @@ export default {
 }
 
 @media (max-width: 480px) {
-  .hotel-grid {
-    grid-template-columns: 1fr;
+  .sort-controls {
+    flex-direction: column;
+    align-items: stretch;
     gap: 12px;
+  }
+
+  .sort-controls > * {
+    width: 100%;
+  }
+
+  .map-btn {
+    align-self: center;
+    width: auto;
   }
 }
 </style>

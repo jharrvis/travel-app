@@ -58,7 +58,7 @@ export default {
         rating: 5,
         reviewCount: "5,124",
         mainImage:
-          "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=400&h=200&fit=crop",
+          "https://images.unsplash.com/photo-1566073771259-6a8506099945?q=80&w=774&auto=format&fit=crop",
         imageCounter: "1/86",
       }),
     },

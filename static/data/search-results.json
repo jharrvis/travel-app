@@ -1,0 +1,781 @@
+{
+  "search_results": {
+    "destination": "Dubai, United Arab Emirates",
+    "search_date": "2025-10-01",
+    "nights": 7,
+    "adults": 2,
+    "children": 0,
+    "total_results": 15,
+    "hotels": [
+      {
+        "id": 1,
+        "name": "One&Only Royal Mirage The Palace",
+        "location": "Jumeirah Beach, Dubai, United Arab Emirates",
+        "category": "Luxury Resort",
+        "stars": 5,
+        "rating": 4.8,
+        "reviews": 2847,
+        "top_pick": true,
+        "main_image": "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800&h=600&fit=crop",
+        "gallery": [
+          "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800&h=600&fit=crop",
+          "https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=800&h=600&fit=crop",
+          "https://images.unsplash.com/photo-1582719508461-905c673771fd?w=800&h=600&fit=crop",
+          "https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?w=800&h=600&fit=crop",
+          "https://images.unsplash.com/photo-1584132967334-10e028bd69f7?w=800&h=600&fit=crop"
+        ],
+        "description": "This luxury, well-renowned hotel offers regal splendour and beautiful views over the Arabian Gulf. All guestrooms and suites at this award-winning hotel are ocean-facing.",
+        "amenities": [
+          "Complimentary Half Board",
+          "Up to 37% saving",
+          "Free Daily Access To Atlantis Aquaventure Waterpark"
+        ],
+        "dates": "1 Oct 2025",
+        "nights_in_resort": 7,
+        "board_basis": "Half Board",
+        "room_type": "Palace Superior Room",
+        "flight_details": {
+          "airline": "Emirates",
+          "baggage": "30kgs included",
+          "class": "Economy"
+        },
+        "pricing": {
+          "adult_price": 2103,
+          "total_price": 4206,
+          "currency": "GBP",
+          "deposit": 421,
+          "original_price": 5500,
+          "savings_percentage": 37
+        },
+        "image_count": 127,
+        "currentPrice": "£2,103",
+        "priceNote": "pp",
+        "originalPrice": "£2,750",
+        "savings": "Save £647",
+        "flightsIncluded": true,
+        "freeChildStay": false,
+        "deposit": "£42 pp deposit"
+      },
+      {
+        "id": 2,
+        "name": "Burj Al Arab Jumeirah",
+        "location": "Jumeirah Beach, Dubai, United Arab Emirates",
+        "category": "Iconic Luxury",
+        "stars": 5,
+        "rating": 4.9,
+        "reviews": 3456,
+        "top_pick": false,
+        "main_image": "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=800&h=600&fit=crop",
+        "gallery": [
+          "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=800&h=600&fit=crop",
+          "https://images.unsplash.com/photo-1445019980597-93fa8acb246c?w=800&h=600&fit=crop",
+          "https://images.unsplash.com/photo-1611892440504-42a792e24d32?w=800&h=600&fit=crop",
+          "https://images.unsplash.com/photo-1590490360182-c33d57733427?w=800&h=600&fit=crop",
+          "https://images.unsplash.com/photo-1559508551-44bff1de756b?w=800&h=600&fit=crop"
+        ],
+        "description": "The world's most luxurious hotel stands on its own artificial island and is shaped like a billowing sail. It's a stunning fusion of engineering and technology.",
+        "amenities": [
+          "Butler Service",
+          "Helicopter Transfers Available",
+          "Private Beach Access"
+        ],
+        "dates": "1 Oct 2025",
+        "nights_in_resort": 7,
+        "board_basis": "Full Board",
+        "room_type": "Deluxe Suite",
+        "flight_details": {
+          "airline": "Emirates",
+          "baggage": "30kgs included",
+          "class": "Business"
+        },
+        "pricing": {
+          "adult_price": 4999,
+          "total_price": 9998,
+          "currency": "GBP",
+          "deposit": 999,
+          "original_price": 12000,
+          "savings_percentage": 17
+        },
+        "image_count": 234,
+        "currentPrice": "£4,999",
+        "priceNote": "pp",
+        "originalPrice": "£6,000",
+        "savings": "Save £1,001",
+        "flightsIncluded": true,
+        "freeChildStay": false,
+        "deposit": "£99 pp deposit"
+      },
+      {
+        "id": 3,
+        "name": "Atlantis The Palm",
+        "location": "The Palm Jumeirah, Dubai, United Arab Emirates",
+        "category": "Resort",
+        "stars": 5,
+        "rating": 4.6,
+        "reviews": 8234,
+        "top_pick": true,
+        "main_image": "https://images.unsplash.com/photo-1582719508461-905c673771fd?w=800&h=600&fit=crop",
+        "gallery": [
+          "https://images.unsplash.com/photo-1582719508461-905c673771fd?w=800&h=600&fit=crop",
+          "https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=800&h=600&fit=crop",
+          "https://images.unsplash.com/photo-1566665797739-1674de7a421a?w=800&h=600&fit=crop",
+          "https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=800&h=600&fit=crop",
+          "https://images.unsplash.com/photo-1489516408517-0c0a15662682?w=800&h=600&fit=crop"
+        ],
+        "description": "An extraordinary world where mythical charm meets modern luxury. Experience unparalleled hospitality at this iconic destination resort.",
+        "amenities": [
+          "Aquaventure Waterpark Access",
+          "Lost Chambers Aquarium",
+          "Kids Club & Teen Zone"
+        ],
+        "dates": "1 Oct 2025",
+        "nights_in_resort": 7,
+        "board_basis": "Breakfast Included",
+        "room_type": "Ocean View Room",
+        "flight_details": {
+          "airline": "Emirates",
+          "baggage": "30kgs included",
+          "class": "Economy"
+        },
+        "pricing": {
+          "adult_price": 2599,
+          "total_price": 5198,
+          "currency": "GBP",
+          "deposit": 519,
+          "original_price": 6500,
+          "savings_percentage": 20
+        },
+        "image_count": 156,
+        "currentPrice": "£2,599",
+        "priceNote": "pp",
+        "originalPrice": "£3,250",
+        "savings": "Save £651",
+        "flightsIncluded": true,
+        "freeChildStay": true,
+        "deposit": "£52 pp deposit"
+      },
+      {
+        "id": 4,
+        "name": "Four Seasons Resort Dubai at Jumeirah Beach",
+        "location": "Jumeirah Beach, Dubai, United Arab Emirates",
+        "category": "Beachfront Resort",
+        "stars": 5,
+        "rating": 4.7,
+        "reviews": 2187,
+        "top_pick": false,
+        "main_image": "https://images.unsplash.com/photo-1584132967334-10e028bd69f7?w=800&h=600&fit=crop",
+        "gallery": [
+          "https://images.unsplash.com/photo-1584132967334-10e028bd69f7?w=800&h=600&fit=crop",
+          "https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?w=800&h=600&fit=crop",
+          "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800&h=600&fit=crop",
+          "https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=800&h=600&fit=crop",
+          "https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?w=800&h=600&fit=crop"
+        ],
+        "description": "Sophisticated beachfront sanctuary offering stunning ocean views, world-class spa treatments, and exceptional dining experiences.",
+        "amenities": [
+          "Private Beach",
+          "Award-winning Spa",
+          "Multiple Dining Options"
+        ],
+        "dates": "1 Oct 2025",
+        "nights_in_resort": 7,
+        "board_basis": "Breakfast Included",
+        "room_type": "Premium Ocean View",
+        "flight_details": {
+          "airline": "British Airways",
+          "baggage": "23kgs included",
+          "class": "Economy"
+        },
+        "pricing": {
+          "adult_price": 2299,
+          "total_price": 4598,
+          "currency": "GBP",
+          "deposit": 459,
+          "original_price": 5200,
+          "savings_percentage": 12
+        },
+        "image_count": 98,
+        "currentPrice": "£2,299",
+        "priceNote": "pp",
+        "originalPrice": "£2,600",
+        "savings": "Save £301",
+        "flightsIncluded": true,
+        "freeChildStay": false,
+        "deposit": "£46 pp deposit"
+      },
+      {
+        "id": 5,
+        "name": "Jumeirah Beach Hotel",
+        "location": "Jumeirah Beach, Dubai, United Arab Emirates",
+        "category": "Beachfront",
+        "stars": 5,
+        "rating": 4.5,
+        "reviews": 5124,
+        "top_pick": false,
+        "main_image": "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800&h=600&fit=crop",
+        "gallery": [
+          "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800&h=600&fit=crop",
+          "https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?w=800&h=600&fit=crop",
+          "https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=800&h=600&fit=crop",
+          "https://images.unsplash.com/photo-1582719508461-905c673771fd?w=800&h=600&fit=crop",
+          "https://images.unsplash.com/photo-1584132967334-10e028bd69f7?w=800&h=600&fit=crop"
+        ],
+        "description": "Distinctive wave-shaped beachfront resort offering uninterrupted views of the Arabian Gulf and world-class facilities.",
+        "amenities": [
+          "Wild Wadi Waterpark Access",
+          "Private Beach",
+          "Family Entertainment"
+        ],
+        "dates": "1 Oct 2025",
+        "nights_in_resort": 7,
+        "board_basis": "Breakfast Included",
+        "room_type": "Ocean Superior",
+        "flight_details": {
+          "airline": "Emirates",
+          "baggage": "30kgs included",
+          "class": "Economy"
+        },
+        "pricing": {
+          "adult_price": 1899,
+          "total_price": 3798,
+          "currency": "GBP",
+          "deposit": 379,
+          "original_price": 4200,
+          "savings_percentage": 10
+        },
+        "image_count": 86,
+        "currentPrice": "£1,899",
+        "priceNote": "pp",
+        "originalPrice": "£2,100",
+        "savings": "Save £201",
+        "flightsIncluded": true,
+        "freeChildStay": true,
+        "deposit": "£38 pp deposit"
+      },
+      {
+        "id": 6,
+        "name": "The Ritz-Carlton Dubai",
+        "location": "Dubai Marina, Dubai, United Arab Emirates",
+        "category": "Marina Resort",
+        "stars": 5,
+        "rating": 4.6,
+        "reviews": 4321,
+        "top_pick": false,
+        "main_image": "https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=800&h=600&fit=crop",
+        "gallery": [
+          "https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=800&h=600&fit=crop",
+          "https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?w=800&h=600&fit=crop",
+          "https://images.unsplash.com/photo-1611892440504-42a792e24d32?w=800&h=600&fit=crop",
+          "https://images.unsplash.com/photo-1590490360182-c33d57733427?w=800&h=600&fit=crop",
+          "https://images.unsplash.com/photo-1559508551-44bff1de756b?w=800&h=600&fit=crop"
+        ],
+        "description": "Luxurious beachfront resort in the heart of Dubai Marina, offering sophisticated accommodation with stunning marina and sea views.",
+        "amenities": [
+          "Private Beach Club",
+          "Ritz Kids Program",
+          "La Mer Beach Access"
+        ],
+        "dates": "1 Oct 2025",
+        "nights_in_resort": 7,
+        "board_basis": "Breakfast Included",
+        "room_type": "Marina View Room",
+        "flight_details": {
+          "airline": "Virgin Atlantic",
+          "baggage": "23kgs included",
+          "class": "Economy"
+        },
+        "pricing": {
+          "adult_price": 2199,
+          "total_price": 4398,
+          "currency": "GBP",
+          "deposit": 439,
+          "original_price": 4800,
+          "savings_percentage": 8
+        },
+        "image_count": 142,
+        "currentPrice": "£2,199",
+        "priceNote": "pp",
+        "originalPrice": "£2,400",
+        "savings": "Save £201",
+        "flightsIncluded": true,
+        "freeChildStay": false,
+        "deposit": "£44 pp deposit"
+      },
+      {
+        "id": 7,
+        "name": "Armani Hotel Dubai",
+        "location": "Downtown Dubai, Dubai, United Arab Emirates",
+        "category": "Luxury",
+        "stars": 5,
+        "rating": 4.8,
+        "reviews": 2876,
+        "top_pick": true,
+        "main_image": "https://images.unsplash.com/photo-1611892440504-42a792e24d32?w=800&h=600&fit=crop",
+        "gallery": [
+          "https://images.unsplash.com/photo-1611892440504-42a792e24d32?w=800&h=600&fit=crop",
+          "https://images.unsplash.com/photo-1445019980597-93fa8acb246c?w=800&h=600&fit=crop",
+          "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=800&h=600&fit=crop",
+          "https://images.unsplash.com/photo-1566665797739-1674de7a421a?w=800&h=600&fit=crop",
+          "https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=800&h=600&fit=crop"
+        ],
+        "description": "The world's first Armani Hotel, located in the iconic Burj Khalifa, offers unparalleled luxury and sophistication in the heart of Dubai.",
+        "amenities": [
+          "Burj Khalifa Location",
+          "Armani Spa",
+          "Personal Shopping Service"
+        ],
+        "dates": "1 Oct 2025",
+        "nights_in_resort": 7,
+        "board_basis": "Room Only",
+        "room_type": "Armani Deluxe",
+        "flight_details": {
+          "airline": "Emirates",
+          "baggage": "30kgs included",
+          "class": "Economy"
+        },
+        "pricing": {
+          "adult_price": 2799,
+          "total_price": 5598,
+          "currency": "GBP",
+          "deposit": 559,
+          "original_price": 6500,
+          "savings_percentage": 14
+        },
+        "image_count": 78,
+        "currentPrice": "£2,799",
+        "priceNote": "pp",
+        "originalPrice": "£3,250",
+        "savings": "Save £451",
+        "flightsIncluded": true,
+        "freeChildStay": false,
+        "deposit": "£56 pp deposit"
+      },
+      {
+        "id": 8,
+        "name": "Park Hyatt Dubai",
+        "location": "Dubai Creek, Dubai, United Arab Emirates",
+        "category": "Creek Resort",
+        "stars": 5,
+        "rating": 4.7,
+        "reviews": 2943,
+        "top_pick": false,
+        "main_image": "https://images.unsplash.com/photo-1566665797739-1674de7a421a?w=800&h=600&fit=crop",
+        "gallery": [
+          "https://images.unsplash.com/photo-1566665797739-1674de7a421a?w=800&h=600&fit=crop",
+          "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800&h=600&fit=crop",
+          "https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=800&h=600&fit=crop",
+          "https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?w=800&h=600&fit=crop",
+          "https://images.unsplash.com/photo-1582719508461-905c673771fd?w=800&h=600&fit=crop"
+        ],
+        "description": "Contemporary luxury resort on Dubai Creek featuring Arabian architecture, tranquil lagoons, and panoramic views of the Dubai skyline.",
+        "amenities": [
+          "Private Marina",
+          "Championship Golf Course",
+          "Amara Spa"
+        ],
+        "dates": "1 Oct 2025",
+        "nights_in_resort": 7,
+        "board_basis": "Breakfast Included",
+        "room_type": "Creek View Room",
+        "flight_details": {
+          "airline": "British Airways",
+          "baggage": "23kgs included",
+          "class": "Economy"
+        },
+        "pricing": {
+          "adult_price": 2399,
+          "total_price": 4798,
+          "currency": "GBP",
+          "deposit": 479,
+          "original_price": 5200,
+          "savings_percentage": 8
+        },
+        "image_count": 134,
+        "currentPrice": "£2,399",
+        "priceNote": "pp",
+        "originalPrice": "£2,600",
+        "savings": "Save £201",
+        "flightsIncluded": true,
+        "freeChildStay": false,
+        "deposit": "£48 pp deposit"
+      },
+      {
+        "id": 9,
+        "name": "JW Marriott Marquis Dubai",
+        "location": "Business Bay, Dubai, United Arab Emirates",
+        "category": "Business Hotel",
+        "stars": 5,
+        "rating": 4.4,
+        "reviews": 6789,
+        "top_pick": false,
+        "main_image": "https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?w=800&h=600&fit=crop",
+        "gallery": [
+          "https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?w=800&h=600&fit=crop",
+          "https://images.unsplash.com/photo-1611892440504-42a792e24d32?w=800&h=600&fit=crop",
+          "https://images.unsplash.com/photo-1590490360182-c33d57733427?w=800&h=600&fit=crop",
+          "https://images.unsplash.com/photo-1559508551-44bff1de756b?w=800&h=600&fit=crop",
+          "https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=800&h=600&fit=crop"
+        ],
+        "description": "Twin tower luxury hotel offering exceptional city views, world-class dining, and convenient access to Dubai's business and leisure districts.",
+        "amenities": [
+          "Rooftop Pool",
+          "Executive Lounge",
+          "Multiple Restaurants"
+        ],
+        "dates": "1 Oct 2025",
+        "nights_in_resort": 7,
+        "board_basis": "Room Only",
+        "room_type": "City View Room",
+        "flight_details": {
+          "airline": "Emirates",
+          "baggage": "30kgs included",
+          "class": "Economy"
+        },
+        "pricing": {
+          "adult_price": 1699,
+          "total_price": 3398,
+          "currency": "GBP",
+          "deposit": 339,
+          "original_price": 3800,
+          "savings_percentage": 11
+        },
+        "image_count": 92,
+        "currentPrice": "£1,699",
+        "priceNote": "pp",
+        "originalPrice": "£1,900",
+        "savings": "Save £201",
+        "flightsIncluded": true,
+        "freeChildStay": false,
+        "deposit": "£34 pp deposit"
+      },
+      {
+        "id": 10,
+        "name": "Waldorf Astoria Dubai Palm Jumeirah",
+        "location": "The Palm Jumeirah, Dubai, United Arab Emirates",
+        "category": "Palm Resort",
+        "stars": 5,
+        "rating": 4.8,
+        "reviews": 1543,
+        "top_pick": true,
+        "main_image": "https://images.unsplash.com/photo-1489516408517-0c0a15662682?w=800&h=600&fit=crop",
+        "gallery": [
+          "https://images.unsplash.com/photo-1489516408517-0c0a15662682?w=800&h=600&fit=crop",
+          "https://images.unsplash.com/photo-1566665797739-1674de7a421a?w=800&h=600&fit=crop",
+          "https://images.unsplash.com/photo-1582719508461-905c673771fd?w=800&h=600&fit=crop",
+          "https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=800&h=600&fit=crop",
+          "https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?w=800&h=600&fit=crop"
+        ],
+        "description": "Sophisticated beachfront resort on Palm Jumeirah offering exceptional personalized service and stunning views of Dubai's coastline.",
+        "amenities": ["Private Beach", "Waldorf Astoria Spa", "Kids Club"],
+        "dates": "1 Oct 2025",
+        "nights_in_resort": 7,
+        "board_basis": "Breakfast Included",
+        "room_type": "Ocean View King",
+        "flight_details": {
+          "airline": "Virgin Atlantic",
+          "baggage": "23kgs included",
+          "class": "Economy"
+        },
+        "pricing": {
+          "adult_price": 2499,
+          "total_price": 4998,
+          "currency": "GBP",
+          "deposit": 499,
+          "original_price": 5500,
+          "savings_percentage": 9
+        },
+        "image_count": 167,
+        "currentPrice": "£2,499",
+        "priceNote": "pp",
+        "originalPrice": "£2,750",
+        "savings": "Save £251",
+        "flightsIncluded": true,
+        "freeChildStay": true,
+        "deposit": "£50 pp deposit"
+      },
+      {
+        "id": 11,
+        "name": "Address Downtown Dubai",
+        "location": "Downtown Dubai, Dubai, United Arab Emirates",
+        "category": "Urban Resort",
+        "stars": 5,
+        "rating": 4.5,
+        "reviews": 5672,
+        "top_pick": false,
+        "main_image": "https://images.unsplash.com/photo-1559508551-44bff1de756b?w=800&h=600&fit=crop",
+        "gallery": [
+          "https://images.unsplash.com/photo-1559508551-44bff1de756b?w=800&h=600&fit=crop",
+          "https://images.unsplash.com/photo-1590490360182-c33d57733427?w=800&h=600&fit=crop",
+          "https://images.unsplash.com/photo-1611892440504-42a792e24d32?w=800&h=600&fit=crop",
+          "https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=800&h=600&fit=crop",
+          "https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?w=800&h=600&fit=crop"
+        ],
+        "description": "Sophisticated urban resort in the heart of Downtown Dubai, offering contemporary luxury with stunning views of Burj Khalifa and Dubai Fountain.",
+        "amenities": [
+          "Burj Khalifa Views",
+          "Dubai Mall Access",
+          "The Spa at Address"
+        ],
+        "dates": "1 Oct 2025",
+        "nights_in_resort": 7,
+        "board_basis": "Room Only",
+        "room_type": "Fountain View",
+        "flight_details": {
+          "airline": "Emirates",
+          "baggage": "30kgs included",
+          "class": "Economy"
+        },
+        "pricing": {
+          "adult_price": 2099,
+          "total_price": 4198,
+          "currency": "GBP",
+          "deposit": 419,
+          "original_price": 4600,
+          "savings_percentage": 9
+        },
+        "image_count": 89,
+        "currentPrice": "£2,099",
+        "priceNote": "pp",
+        "originalPrice": "£2,300",
+        "savings": "Save £201",
+        "flightsIncluded": true,
+        "freeChildStay": false,
+        "deposit": "£42 pp deposit"
+      },
+      {
+        "id": 12,
+        "name": "Raffles Dubai",
+        "location": "Wafi City, Dubai, United Arab Emirates",
+        "category": "Pyramid Hotel",
+        "stars": 5,
+        "rating": 4.6,
+        "reviews": 3421,
+        "top_pick": false,
+        "main_image": "https://images.unsplash.com/photo-1564501049412-61c2a3083791?w=800&h=600&fit=crop",
+        "gallery": [
+          "https://images.unsplash.com/photo-1564501049412-61c2a3083791?w=800&h=600&fit=crop",
+          "https://images.unsplash.com/photo-1445019980597-93fa8acb246c?w=800&h=600&fit=crop",
+          "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=800&h=600&fit=crop",
+          "https://images.unsplash.com/photo-1611892440504-42a792e24d32?w=800&h=600&fit=crop",
+          "https://images.unsplash.com/photo-1590490360182-c33d57733427?w=800&h=600&fit=crop"
+        ],
+        "description": "Distinctive pyramid-shaped luxury hotel offering an extraordinary experience with its unique architecture and exceptional Egyptian-themed design.",
+        "amenities": ["Raffles Spa", "Rooftop Pool", "Fine Dining Collection"],
+        "dates": "1 Oct 2025",
+        "nights_in_resort": 7,
+        "board_basis": "Room Only",
+        "room_type": "Premier Room",
+        "flight_details": {
+          "airline": "British Airways",
+          "baggage": "23kgs included",
+          "class": "Economy"
+        },
+        "pricing": {
+          "adult_price": 2299,
+          "total_price": 4598,
+          "currency": "GBP",
+          "deposit": 459,
+          "original_price": 5000,
+          "savings_percentage": 8
+        },
+        "image_count": 112,
+        "currentPrice": "£2,299",
+        "priceNote": "pp",
+        "originalPrice": "£2,500",
+        "savings": "Save £201",
+        "flightsIncluded": true,
+        "freeChildStay": false,
+        "deposit": "£46 pp deposit"
+      },
+      {
+        "id": 13,
+        "name": "The St. Regis Dubai",
+        "location": "Al Habtoor City, Dubai, United Arab Emirates",
+        "category": "Luxury Resort",
+        "stars": 5,
+        "rating": 4.7,
+        "reviews": 2198,
+        "top_pick": false,
+        "main_image": "https://images.unsplash.com/photo-1571003123894-1f0594d2b5d9?w=800&h=600&fit=crop",
+        "gallery": [
+          "https://images.unsplash.com/photo-1571003123894-1f0594d2b5d9?w=800&h=600&fit=crop",
+          "https://images.unsplash.com/photo-1566665797739-1674de7a421a?w=800&h=600&fit=crop",
+          "https://images.unsplash.com/photo-1489516408517-0c0a15662682?w=800&h=600&fit=crop",
+          "https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=800&h=600&fit=crop",
+          "https://images.unsplash.com/photo-1559508551-44bff1de756b?w=800&h=600&fit=crop"
+        ],
+        "description": "Elegant beachfront resort offering bespoke butler service, world-class dining, and stunning views of the Arabian Gulf and Dubai Water Canal.",
+        "amenities": [
+          "St. Regis Butler Service",
+          "Private Beach",
+          "Iridium Spa"
+        ],
+        "dates": "1 Oct 2025",
+        "nights_in_resort": 7,
+        "board_basis": "Breakfast Included",
+        "room_type": "Grand Deluxe Room",
+        "flight_details": {
+          "airline": "Emirates",
+          "baggage": "30kgs included",
+          "class": "Economy"
+        },
+        "pricing": {
+          "adult_price": 2699,
+          "total_price": 5398,
+          "currency": "GBP",
+          "deposit": 539,
+          "original_price": 5900,
+          "savings_percentage": 9
+        },
+        "image_count": 145,
+        "currentPrice": "£2,699",
+        "priceNote": "pp",
+        "originalPrice": "£2,950",
+        "savings": "Save £251",
+        "flightsIncluded": true,
+        "freeChildStay": false,
+        "deposit": "£54 pp deposit"
+      },
+      {
+        "id": 14,
+        "name": "Mandarin Oriental Jumeira",
+        "location": "Jumeira Beach, Dubai, United Arab Emirates",
+        "category": "Beach Resort",
+        "stars": 5,
+        "rating": 4.8,
+        "reviews": 1876,
+        "top_pick": true,
+        "main_image": "https://images.unsplash.com/photo-1584132967334-10e028bd69f7?w=800&h=600&fit=crop",
+        "gallery": [
+          "https://images.unsplash.com/photo-1584132967334-10e028bd69f7?w=800&h=600&fit=crop",
+          "https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?w=800&h=600&fit=crop",
+          "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800&h=600&fit=crop",
+          "https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=800&h=600&fit=crop",
+          "https://images.unsplash.com/photo-1582719508461-905c673771fd?w=800&h=600&fit=crop"
+        ],
+        "description": "Contemporary beachfront sanctuary combining Asian-inspired design with Arabian hospitality, featuring exceptional dining and wellness facilities.",
+        "amenities": [
+          "Private Beach Access",
+          "Spa at Mandarin Oriental",
+          "Signature Restaurants"
+        ],
+        "dates": "1 Oct 2025",
+        "nights_in_resort": 7,
+        "board_basis": "Half Board",
+        "room_type": "Ocean View Room",
+        "flight_details": {
+          "airline": "Virgin Atlantic",
+          "baggage": "23kgs included",
+          "class": "Economy"
+        },
+        "pricing": {
+          "adult_price": 2899,
+          "total_price": 5798,
+          "currency": "GBP",
+          "deposit": 579,
+          "original_price": 6400,
+          "savings_percentage": 9
+        },
+        "image_count": 178,
+        "currentPrice": "£2,899",
+        "priceNote": "pp",
+        "originalPrice": "£3,200",
+        "savings": "Save £301",
+        "flightsIncluded": true,
+        "freeChildStay": true,
+        "deposit": "£58 pp deposit"
+      },
+      {
+        "id": 15,
+        "name": "Conrad Dubai",
+        "location": "Sheikh Zayed Road, Dubai, United Arab Emirates",
+        "category": "Business Hotel",
+        "stars": 5,
+        "rating": 4.4,
+        "reviews": 2654,
+        "top_pick": false,
+        "main_image": "https://images.unsplash.com/photo-1590490360182-c33d57733427?w=800&h=600&fit=crop",
+        "gallery": [
+          "https://images.unsplash.com/photo-1590490360182-c33d57733427?w=800&h=600&fit=crop",
+          "https://images.unsplash.com/photo-1611892440504-42a792e24d32?w=800&h=600&fit=crop",
+          "https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?w=800&h=600&fit=crop",
+          "https://images.unsplash.com/photo-1559508551-44bff1de756b?w=800&h=600&fit=crop",
+          "https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=800&h=600&fit=crop"
+        ],
+        "description": "Modern luxury hotel on Sheikh Zayed Road offering sophisticated accommodation with panoramic city views and exceptional business facilities.",
+        "amenities": [
+          "Executive Lounge",
+          "Rooftop Pool",
+          "Award-winning Restaurants"
+        ],
+        "dates": "1 Oct 2025",
+        "nights_in_resort": 7,
+        "board_basis": "Room Only",
+        "room_type": "Executive Room",
+        "flight_details": {
+          "airline": "British Airways",
+          "baggage": "23kgs included",
+          "class": "Economy"
+        },
+        "pricing": {
+          "adult_price": 1799,
+          "total_price": 3598,
+          "currency": "GBP",
+          "deposit": 359,
+          "original_price": 4000,
+          "savings_percentage": 10
+        },
+        "image_count": 94,
+        "currentPrice": "£1,799",
+        "priceNote": "pp",
+        "originalPrice": "£2,000",
+        "savings": "Save £201",
+        "flightsIncluded": true,
+        "freeChildStay": false,
+        "deposit": "£36 pp deposit"
+      }
+    ],
+    "filters": {
+      "price_range": {
+        "min": 1699,
+        "max": 4999,
+        "currency": "GBP"
+      },
+      "star_ratings": [5],
+      "board_basis_options": [
+        "Room Only",
+        "Breakfast Included",
+        "Half Board",
+        "Full Board"
+      ],
+      "amenities": [
+        "Private Beach",
+        "Spa",
+        "Kids Club",
+        "Pool",
+        "Gym",
+        "Restaurant",
+        "Bar",
+        "WiFi",
+        "Airport Transfer"
+      ],
+      "locations": [
+        "Jumeirah Beach",
+        "The Palm Jumeirah",
+        "Dubai Marina",
+        "Downtown Dubai",
+        "Business Bay",
+        "Sheikh Zayed Road",
+        "Dubai Creek",
+        "Al Habtoor City"
+      ]
+    },
+    "meta": {
+      "search_id": "search_20251001_dubai_7nights",
+      "currency": "GBP",
+      "exchange_rate": 1.0,
+      "last_updated": "2025-06-25T10:30:00Z",
+      "api_version": "v2.1"
+    }
+  }
+}

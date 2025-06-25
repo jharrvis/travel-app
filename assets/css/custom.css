@@ -826,6 +826,7 @@
 }
 
 /* Hotel Image Container */
+/*
 .hotel-image-container {
   border-radius: 16px;
   position: relative;
@@ -844,6 +845,8 @@
 .hotel-card-new:hover .hotel-image-container img {
   transform: scale(1.05);
 }
+
+*/
 
 /* Free child stay badge */
 .free-child-badge {
