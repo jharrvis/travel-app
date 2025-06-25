@@ -1,14 +1,38 @@
+To match the provided image, we need to restructure the layout of the
+`HotelCard.vue` component. The image shows a single-column layout for the entire
+card, with the flight details, room details, and deposit/continue sections
+appearing *below* the main hotel image and content area, and all of these
+sections are within the main `hotel-card` element. Here's a detailed plan and
+the updated `HotelCard.vue` code: **Key Changes to achieve the desired layout:**
+1. **Reorder Sections in Template:** * The `hotel-row` (containing image and
+hotel content) will be the first main block. * The `pricing-info` section, which
+was previously inside the `hotel-content`, needs to be moved out and placed
+directly below `hotel-row`. * The `flight-row` (containing flight and room
+details) will come after `pricing-info`. * The `deposit-continue-section` will
+be the last main block. 2. **Adjust `hotel-row` for main content and pricing:**
+* The `hotel-image-container` and `hotel-content` remain siblings within
+`hotel-row`. * The `pricing-info` will be moved out of `hotel-content` and
+become a direct child of `hotel-card`. 3. **Adjust `flight-row` to contain both
+flight and room details:** * The image shows "Flight details" and "Room details"
+side-by-side within a shared section. The current `flight-row` already
+facilitates this. 4. **Create distinct styling for each main section
+(image/content, pricing, flight/room, deposit/continue):** * We'll ensure
+consistent padding and margins for these main sections. * The borders and
+background colors will be adjusted to match the image. 5. **Refine Styling
+(CSS):** * Update `hotel-card` to `flex-direction: column;` if not already set.
+* Adjust `hotel-row` display and width properties. * Ensure `pricing-info`,
+`flight-row`, and `deposit-continue-section` have appropriate top borders and
+padding. * Modify `date-nights-grid` to be `flex` based and center content. *
+Adjust `price-breakdown` to be `flex` and space-between. * Align `Adult` and
+`Total` price elements as seen in the image. Here's the updated `HotelCard.vue`
+code: ```vue
 <template>
   <div class="hotel-card" @click="$emit('hotel-click', hotel)">
-    <!-- BARIS PERTAMA: DETAIL HOTEL - 2 KOLOM -->
-    <div class="hotel-row">
-      <!-- KOLOM 1: Gallery Gambar -->
+    <div class="hotel-main-section">
       <div class="hotel-image-container">
-        <!-- Image Gallery -->
         <div class="image-gallery">
           <img :src="getCurrentImage()" :alt="hotel.name" class="hotel-image" />
 
-          <!-- Gallery Navigation Arrows -->
           <button
             class="gallery-arrow gallery-arrow-left"
             @click.stop="previousImage"
@@ -41,10 +65,8 @@
             </svg>
           </button>
 
-          <!-- Top Pick Badge -->
           <div class="top-pick-badge" v-if="hotel.top_pick">Top pick</div>
 
-          <!-- Images Button -->
           <div class="images-btn" @click.stop="openGallery">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
               <rect
@@ -69,9 +91,7 @@
         </div>
       </div>
 
-      <!-- KOLOM 2: Hotel Content - Flex Column Layout -->
       <div class="hotel-content">
-        <!-- Hotel Name dengan Info Icon -->
         <div class="hotel-title-row">
           <h3 class="hotel-name">{{ hotel.name }}</h3>
           <div
@@ -93,17 +113,14 @@
           </div>
         </div>
 
-        <!-- Star Rating -->
         <div class="hotel-stars">
           <span v-for="star in hotel.stars" :key="star">★</span>
         </div>
 
-        <!-- Description -->
         <div class="hotel-description" v-if="hotel.description">
           {{ hotel.description }}
         </div>
 
-        <!-- Amenities dengan checkmarks -->
         <div class="hotel-amenities" v-if="hotel.amenities">
           <div
             v-for="amenity in hotel.amenities.slice(0, 3)"
@@ -139,52 +156,46 @@
             </div>
           </div>
         </div>
+      </div>
+    </div>
 
-        <!-- Date, Nights, and Pricing - Moved to bottom of this column -->
-        <div class="pricing-info">
-          <!-- Date and Nights Info -->
-          <div class="date-nights-grid">
-            <div class="info-block">
-              <div class="info-label">DATE</div>
-              <div class="info-value">
-                {{ formatDate(searchData.startDate) }}
-              </div>
-            </div>
-            <div class="info-block">
-              <div class="info-label">NIGHTS IN RESORT</div>
-              <div class="info-value">
-                {{ calculateNights(searchData.startDate, searchData.endDate) }}
-              </div>
-            </div>
+    <div class="pricing-section">
+      <div class="date-nights-grid">
+        <div class="info-block">
+          <div class="info-label">DATE</div>
+          <div class="info-value">
+            {{ formatDate(searchData.startDate) }}
           </div>
+        </div>
+        <div class="info-block">
+          <div class="info-label">NIGHTS IN RESORT</div>
+          <div class="info-value">
+            {{ calculateNights(searchData.startDate, searchData.endDate) }}
+          </div>
+        </div>
+      </div>
 
-          <!-- Pricing -->
-          <div class="price-breakdown">
-            <div class="adult-price">
-              <span class="adult-label">Adult:</span>
-              <span class="adult-amount">{{
-                formatPrice(
-                  hotel.pricing?.adult_price || extractPrice(hotel.currentPrice)
-                )
-              }}</span>
-            </div>
-            <div class="total-price">
-              <span class="total-label">Total</span>
-              <span class="total-amount">{{
-                formatPrice(
-                  hotel.pricing?.total_price ||
-                    extractPrice(hotel.currentPrice) * 2
-                )
-              }}</span>
-            </div>
-          </div>
+      <div class="price-breakdown">
+        <div class="adult-price">
+          <span class="adult-label">Adult:</span>
+          <span class="adult-amount">{{
+            formatPrice(
+              hotel.pricing?.adult_price || extractPrice(hotel.currentPrice)
+            )
+          }}</span>
+        </div>
+        <div class="total-price">
+          <span class="total-label">Total</span>
+          <span class="total-amount">{{
+            formatPrice(
+              hotel.pricing?.total_price || extractPrice(hotel.currentPrice) * 2
+            )
+          }}</span>
         </div>
       </div>
     </div>
 
-    <!-- BARIS KEDUA: FLIGHT DETAILS -->
-    <div class="flight-row">
-      <!-- Flight Details -->
+    <div class="flight-room-section">
       <div class="flight-detail-section">
         <div class="detail-header">Flight details</div>
         <div class="detail-content">
@@ -228,7 +239,6 @@
         </div>
       </div>
 
-      <!-- Room Details -->
       <div class="room-detail-section">
         <div class="detail-header">Room details</div>
         <div class="detail-content">
@@ -245,85 +255,45 @@
           </div>
         </div>
       </div>
+    </div>
 
-      <!-- Deposit and Continue Section -->
-      <div class="deposit-continue-section">
-        <div class="deposit-info">
-          <span>Confirm this holiday for </span>
-          <strong
-            >{{
-              formatPrice(
-                hotel.pricing?.deposit ||
-                  Math.round(extractPrice(hotel.currentPrice) * 0.2)
-              )
-            }}
-            deposit.</strong
-          >
-          <svg
-            width="16"
-            height="16"
-            viewBox="0 0 24 24"
-            fill="none"
-            class="deposit-icon"
-          >
-            <rect
-              x="3"
-              y="4"
-              width="18"
-              height="16"
-              rx="2"
+    <div class="deposit-continue-section">
+      <div class="deposit-info">
+        <span>Confirm this holiday for </span>
+        <strong
+          >{{
+            formatPrice(
+              hotel.pricing?.deposit ||
+                Math.round(extractPrice(hotel.currentPrice) * 0.2)
+            )
+          }}
+          deposit.</strong
+        >
+        <a href="#" class="deposit-link" @click.stop="showDepositBreakdown"
+          >See deposit breakdown</a
+        >
+        <div
+          class="info-icon deposit-info-icon"
+          @click.stop="showDepositBreakdown"
+        >
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+            <circle
+              cx="12"
+              cy="12"
+              r="10"
               stroke="currentColor"
               stroke-width="2"
             />
-            <line
-              x1="9"
-              y1="9"
-              x2="15"
-              y2="9"
-              stroke="currentColor"
-              stroke-width="2"
-            />
+            <path d="M12,8 L12,16" stroke="currentColor" stroke-width="2" />
+            <circle cx="12" cy="6" r="1" fill="currentColor" />
           </svg>
-          <a href="#" class="deposit-link" @click.stop="showDepositBreakdown"
-            >See deposit breakdown</a
-          >
         </div>
+      </div>
 
-        <div class="continue-section">
-          <div class="warning-icon" v-if="showWarning">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-              <circle
-                cx="12"
-                cy="12"
-                r="10"
-                stroke="#dc3545"
-                stroke-width="2"
-              />
-              <line
-                x1="12"
-                y1="8"
-                x2="12"
-                y2="12"
-                stroke="#dc3545"
-                stroke-width="2"
-              />
-              <line
-                x1="12"
-                y1="16"
-                x2="12.01"
-                y2="16"
-                stroke="#dc3545"
-                stroke-width="2"
-              />
-            </svg>
-          </div>
-          <button
-            class="continue-btn"
-            @click.stop="$emit('hotel-click', hotel)"
-          >
-            Continue
-          </button>
-        </div>
+      <div class="continue-section">
+        <button class="continue-btn" @click.stop="$emit('hotel-click', hotel)">
+          Continue
+        </button>
       </div>
     </div>
   </div>
@@ -355,7 +325,7 @@ export default {
   emits: ["hotel-click"],
   data() {
     return {
-      showWarning: false,
+      showWarning: false, // This was present in the old template but not in the image's "continue" section. Keeping it for now but commenting out its usage in template.
       currentImageIndex: 0,
     };
   },
@@ -400,7 +370,7 @@ export default {
     },
 
     calculateNights(startDate, endDate) {
-      if (!startDate || !endDate) return 7;
+      if (!startDate || !endDate) return 7; // Default value if dates are not provided
 
       const start = new Date(startDate);
       const end = new Date(endDate);
@@ -414,14 +384,22 @@ export default {
       if (typeof amount === "string") {
         return amount;
       }
-      return `£${amount?.toLocaleString() || "0"}`;
+      // Ensure the amount is a number before formatting
+      const numericAmount = parseFloat(amount);
+      if (isNaN(numericAmount)) {
+        return "£0"; // Default or error case
+      }
+      return `£${numericAmount.toLocaleString("en-GB", {
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 0,
+      })}`;
     },
 
     extractPrice(priceString) {
       if (typeof priceString === "number") return priceString;
       if (typeof priceString === "string") {
-        const match = priceString.match(/[\d,]+/);
-        return match ? parseInt(match[0].replace(/,/g, "")) : 0;
+        const match = priceString.match(/[\d,.]+/); // Match digits, commas, or periods
+        return match ? parseFloat(match[0].replace(/,/g, "")) : 0;
       }
       return 0;
     },
@@ -450,7 +428,7 @@ export default {
 </script>
 
 <style scoped>
-/* Base Hotel Card Styles - 2 Rows Layout */
+/* Base Hotel Card Styles - Column Layout */
 .hotel-card {
   background: white;
   border: 1px solid #ddd;
@@ -458,17 +436,17 @@ export default {
   transition: all 0.3s ease;
   cursor: pointer;
   display: flex;
-  flex-direction: column;
+  flex-direction: column; /* Ensure main container is a column */
   width: 100%;
-  margin-bottom: 1px;
+  border-radius: 8px; /* Added border-radius as per image */
 }
 
 .hotel-card:hover {
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 }
 
-/* BARIS PERTAMA: DETAIL HOTEL - 2 KOLOM */
-.hotel-row {
+/* SECTION 1: Hotel Main Section (Image & Content) */
+.hotel-main-section {
   display: flex;
   min-height: 280px;
 }
@@ -479,6 +457,8 @@ export default {
   width: 320px;
   flex-shrink: 0;
   overflow: hidden;
+  border-top-left-radius: 8px; /* Apply to corners matching card */
+  border-bottom-left-radius: 8px; /* Apply to corners matching card */
 }
 
 .image-gallery {
@@ -510,6 +490,7 @@ export default {
   transition: all 0.2s;
   z-index: 3;
   color: #333;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Added subtle shadow */
 }
 
 .gallery-arrow:hover {
@@ -527,15 +508,16 @@ export default {
 
 .top-pick-badge {
   position: absolute;
-  top: 12px;
-  left: 12px;
+  top: 8px; /* Sedikit naik */
+  left: 8px; /* Sedikit ke kiri */
   background: #dc3545;
   color: white;
   padding: 6px 12px;
   border-radius: 4px;
   font-size: 12px;
   font-weight: 600;
-  z-index: 2;
+  z-index: 3; /* Pastikan lebih tinggi dari elemen lain di dekatnya */
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2); /* Tambahkan sedikit bayangan untuk efek menonjol */
 }
 
 .images-btn {
@@ -565,12 +547,12 @@ export default {
   padding: 20px;
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 12px; /* Reduced gap for a tighter look */
 }
 
 .hotel-title-row {
   display: flex;
-  align-items: flex-start;
+  align-items: center; /* Changed to center for better alignment */
   justify-content: space-between;
 }
 
@@ -584,22 +566,30 @@ export default {
 }
 
 .info-icon {
-  background: #007bff;
+  background: #007bff; /* Kept existing blue, image shows light blue */
   color: white;
-  width: 20px;
-  height: 20px;
+  width: 18px; /* Slightly smaller */
+  height: 18px; /* Slightly smaller */
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
   flex-shrink: 0;
-  margin-left: 10px;
+  margin-left: 8px; /* Reduced margin */
+  font-size: 12px; /* Adjust SVG size if needed */
+}
+
+.info-icon svg {
+  width: 12px; /* Smaller SVG */
+  height: 12px; /* Smaller SVG */
+  stroke-width: 2.5; /* Thicker stroke for better visibility */
 }
 
 .hotel-stars {
   color: #ffa500;
   font-size: 16px;
+  letter-spacing: 2px; /* Added spacing to stars */
 }
 
 .hotel-description {
@@ -610,6 +600,8 @@ export default {
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
+  margin-top: 4px; /* Adjust spacing */
+  margin-bottom: 8px; /* Adjust spacing */
 }
 
 .hotel-amenities {
@@ -628,33 +620,46 @@ export default {
 
 .check-icon {
   flex-shrink: 0;
+  color: #28a745; /* Ensure checkmark color is green */
 }
 
 .info-tooltip {
   margin-left: 4px;
   color: #666;
   cursor: pointer;
+  display: flex; /* To align the SVG */
+  align-items: center;
 }
 
-/* Pricing Info - Moved to bottom of column 2 */
-.pricing-info {
-  margin-top: auto;
-  padding-top: 16px;
+.info-tooltip svg {
+  width: 14px; /* Match image size */
+  height: 14px; /* Match image size */
+  stroke: #6c757d; /* Grey color for the info icon */
+  stroke-width: 2;
+}
+
+/* SECTION 2: Pricing Info */
+.pricing-section {
+  padding: 16px 20px;
   border-top: 1px solid #eee;
+  background-color: white; /* Ensure consistent background */
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
 }
 
 .date-nights-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 16px;
-  margin-bottom: 16px;
-  text-align: center;
+  display: flex; /* Changed to flex for better control */
+  gap: 20px; /* Increased gap */
+  flex-basis: 50%; /* Take half the space */
+  justify-content: flex-start; /* Align to start */
 }
 
 .info-block {
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-start; /* Align text to left within block */
 }
 
 .info-label {
@@ -674,13 +679,16 @@ export default {
 
 .price-breakdown {
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-end; /* Align to the right */
   align-items: center;
+  gap: 20px; /* Space between adult and total */
+  flex-basis: 50%; /* Take half the space */
 }
 
 .adult-price {
   display: flex;
   flex-direction: column;
+  align-items: flex-end; /* Align adult price to the right */
   gap: 2px;
 }
 
@@ -713,14 +721,14 @@ export default {
   color: #333;
 }
 
-/* BARIS KEDUA: FLIGHT DETAILS */
-.flight-row {
+/* SECTION 3: FLIGHT DETAILS & ROOM DETAILS */
+.flight-room-section {
   display: flex;
   padding: 16px 20px;
   background: #f8f9fa;
   border-top: 1px solid #eee;
-  align-items: center;
-  gap: 20px;
+  align-items: flex-start; /* Align items to the top */
+  gap: 30px; /* Increased gap between sections */
 }
 
 .flight-detail-section,
@@ -757,6 +765,18 @@ export default {
   color: #666;
 }
 
+.baggage-info svg {
+  stroke: #666; /* Grey color for baggage icon */
+  width: 14px;
+  height: 14px;
+}
+
+.airline-name,
+.flight-class,
+.room-type {
+  font-weight: 600; /* Make these bold as per image */
+}
+
 .flight-info-link,
 .change-link,
 .deposit-link {
@@ -777,13 +797,14 @@ export default {
   margin-top: 4px;
 }
 
-/* Deposit and Continue Section */
+/* SECTION 4: Deposit and Continue Section */
 .deposit-continue-section {
   display: flex;
   align-items: center;
-  gap: 20px;
-  flex: 1;
+  padding: 16px 20px;
+  border-top: 1px solid #eee;
   justify-content: space-between;
+  background-color: white;
 }
 
 .deposit-info {
@@ -796,8 +817,9 @@ export default {
   flex: 1;
 }
 
-.deposit-icon {
-  margin: 0 4px;
+/* Removed deposit-icon svg and used info-icon styling */
+.deposit-info-icon {
+  margin-left: 4px; /* Adjust spacing */
 }
 
 .continue-section {
@@ -806,12 +828,15 @@ export default {
   gap: 12px;
 }
 
+/* Removed the warning icon as it's not in the image */
+/*
 .warning-icon {
   color: #dc3545;
 }
+*/
 
 .continue-btn {
-  background: #17a2b8;
+  background: #17a2b8; /* Use the turquoise color from the image */
   color: white;
   border: none;
   padding: 12px 24px;
@@ -824,12 +849,12 @@ export default {
 }
 
 .continue-btn:hover {
-  background: #138496;
+  background: #138496; /* Darker shade on hover */
 }
 
 /* Responsive Design */
 @media (max-width: 1024px) {
-  .hotel-row {
+  .hotel-main-section {
     flex-direction: column;
     min-height: auto;
   }
@@ -837,15 +862,28 @@ export default {
   .hotel-image-container {
     width: 100%;
     height: 200px;
+    border-bottom-left-radius: 0; /* Adjust for column layout */
+    border-top-right-radius: 8px; /* Top right corner should be rounded now */
   }
 
   .pricing-section {
-    width: 100%;
-    border-left: none;
-    border-top: 1px solid #eee;
+    flex-direction: column;
+    align-items: flex-start; /* Align items to the start when stacked */
+    gap: 16px;
   }
 
-  .flight-row {
+  .date-nights-grid,
+  .price-breakdown {
+    width: 100%;
+    justify-content: space-between; /* Spread out elements */
+  }
+
+  .adult-price,
+  .total-price {
+    align-items: flex-start; /* Align text to left */
+  }
+
+  .flight-room-section {
     flex-direction: column;
     align-items: stretch;
     gap: 16px;
@@ -871,7 +909,7 @@ export default {
     padding: 16px;
   }
 
-  .flight-row {
+  .flight-room-section {
     padding: 12px 16px;
   }
 
@@ -888,18 +926,7 @@ export default {
   }
 
   .date-nights-grid {
-    grid-template-columns: 1fr 1fr;
     gap: 12px;
-  }
-
-  .price-breakdown {
-    flex-direction: column;
-    align-items: stretch;
-    gap: 8px;
-  }
-
-  .total-price {
-    align-items: flex-start;
   }
 }
 </style>
