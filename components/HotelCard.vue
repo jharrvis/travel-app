@@ -139,7 +139,8 @@
               v-if="amenity.includes('Waterpark')"
               @mouseover="
                 showTooltip(
-                  'This amenity includes a waterpark with various slides and pools suitable for all ages.'
+                  'This amenity includes a waterpark with various slides and pools suitable for all ages.',
+                  $event
                 )
               "
               @mouseleave="hideTooltip"
@@ -1264,17 +1265,17 @@ export default {
 .detail-content-column {
   font-size: 14px;
   color: #333;
-  flex: 1; /* Take remaining space */
+  flex: 1;
   display: flex;
   align-items: center;
-  justify-content: flex-start; /* Align content to the left */
+  justify-content: flex-start;
   gap: 4px;
 }
 
 .airline-name,
 .flight-class,
 .room-type {
-  font-weight: 600; /* Make these bold as per image */
+  font-weight: 600;
 }
 
 .baggage-info {
@@ -1369,80 +1370,79 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 9999; /* Pastikan selalu di atas */
+  z-index: 9999;
 }
 
-/* Gallery Modal Styles - REVAMPED */
-.gallery-modal-content {
-  background: white;
-  border-radius: 8px;
-  position: relative;
-  max-width: 95%; /* Agak lebar dari 90% */
-  max-height: 95%;
-  overflow: hidden; /* Pastikan gambar tidak keluar dari sudut bulat */
-  display: flex;
-  flex-direction: column;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5); /* Bayangan lebih kuat */
-  padding: 0; /* Gambar mengisi penuh */
-}
-
-/* Close button baru untuk modal galeri */
+/* Close button style for all modals */
 .close-modal-btn-revamped {
   position: absolute;
-  top: 15px; /* Jarak dari atas */
-  right: 15px; /* Jarak dari kanan */
-  background: rgba(255, 255, 255, 0.9); /* Background putih transparan */
+  top: 15px;
+  right: 15px;
+  background: rgba(255, 255, 255, 0.9);
   border: none;
-  border-radius: 50%; /* Bentuk lingkaran */
-  width: 36px; /* Ukuran tombol */
+  border-radius: 50%;
+  width: 36px;
   height: 36px;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  z-index: 10001; /* Pastikan di atas semua elemen modal lainnya */
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Bayangan ringan */
+  z-index: 10001;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
   transition: background 0.2s ease, transform 0.2s ease;
 }
 
 .close-modal-btn-revamped:hover {
-  background: white; /* Lebih solid saat hover */
-  transform: scale(1.05); /* Sedikit membesar */
+  background: white;
+  transform: scale(1.05);
 }
 
 .close-modal-btn-revamped svg {
-  color: #333; /* Warna ikon silang */
+  color: #333;
   width: 20px;
   height: 20px;
   stroke-width: 2;
 }
 
-.modal-image {
-  max-width: 100%;
-  max-height: 100%; /* Gambar mengisi penuh tinggi modal */
-  display: block;
-  object-fit: contain; /* Gambar pas tanpa terpotong */
-  border-radius: 8px; /* Sesuaikan dengan border-radius modal */
-  flex-grow: 1; /* Izinkan gambar tumbuh di dalam modal */
+/* Gallery Modal specific styles */
+.gallery-modal-content {
+  background: white;
+  border-radius: 8px;
+  position: relative;
+  max-width: 95%;
+  max-height: 95%;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+  padding: 0;
 }
 
-/* Navigasi Galeri yang Diperbarui */
+.modal-image {
+  max-width: 100%;
+  max-height: 100%;
+  display: block;
+  object-fit: contain;
+  border-radius: 8px;
+  flex-grow: 1;
+}
+
 .gallery-modal-nav-revamped {
   position: absolute;
-  bottom: 15px; /* Jarak dari bawah gambar */
+  bottom: 15px;
   left: 50%;
   transform: translateX(-50%);
   display: flex;
   align-items: center;
-  gap: 25px; /* Lebih banyak ruang antar elemen navigasi */
+  gap: 25px;
   color: white;
-  background-color: rgba(0, 0, 0, 0.6); /* Background hitam transparan */
-  padding: 10px 20px; /* Padding lebih besar */
-  border-radius: 50px; /* Bentuk pil */
-  font-size: 16px; /* Ukuran font lebih besar */
+  background-color: rgba(0, 0, 0, 0.6);
+  padding: 10px 20px;
+  border-radius: 50px;
+  font-size: 16px;
   font-weight: 500;
-  z-index: 10000; /* Di atas gambar */
-  backdrop-filter: blur(5px); /* Efek blur untuk background */
+  z-index: 10000;
+  backdrop-filter: blur(5px);
 }
 
 .gallery-modal-nav-revamped button {
@@ -1464,25 +1464,25 @@ export default {
 }
 
 .gallery-modal-nav-revamped button:disabled {
-  opacity: 0.4; /* Lebih transparan saat disabled */
+  opacity: 0.4;
   cursor: not-allowed;
 }
 
 .gallery-modal-nav-revamped svg {
   stroke: white;
-  width: 24px; /* Ukuran ikon panah lebih besar */
+  width: 24px;
   height: 24px;
 }
 
-/* Map Modal Styles (tetap seperti sebelumnya) */
+/* Map Modal Styles */
 .map-modal-content {
   background: white;
   padding: 20px;
   border-radius: 8px;
   position: relative;
-  max-width: 95%; /* Agak lebar dari 90% */
+  max-width: 95%;
   max-height: 95%;
-  width: 700px; /* Lebar tetap untuk desktop */
+  width: 700px;
   height: auto;
   overflow: hidden;
   display: flex;
@@ -1582,7 +1582,7 @@ export default {
 }
 
 .ok-btn {
-  background: #153b3c; /* Diperbarui warnanya */
+  background: #153b3c;
   color: white;
   border: none;
   padding: 10px 25px;
@@ -1594,10 +1594,10 @@ export default {
 }
 
 .ok-btn:hover {
-  background: #0e2627; /* Darker shade on hover */
+  background: #0e2627;
 }
 
-/* New Notification Styles */
+/* Notification Styles */
 .notification {
   position: fixed;
   bottom: 20px;
@@ -1609,7 +1609,7 @@ export default {
   border-radius: 8px;
   font-size: 14px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-  z-index: 10002; /* Pastikan di atas modal */
+  z-index: 10002;
   opacity: 1;
   transition: opacity 0.5s ease-in-out;
 }
@@ -1618,7 +1618,8 @@ export default {
 .notification.fade-leave-active {
   transition: opacity 0.5s;
 }
-.notification.fade-enter, .notification.fade-leave-to /* .fade-leave-active in <2.1.8 */ {
+.notification.fade-enter,
+.notification.fade-leave-to {
   opacity: 0;
 }
 
@@ -1628,7 +1629,7 @@ export default {
   padding: 25px;
   border-radius: 8px;
   position: relative;
-  max-width: 500px; /* Adjust width as needed */
+  max-width: 500px;
   width: 90%;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
   display: flex;
@@ -1749,7 +1750,7 @@ export default {
   color: #333;
   background-color: white;
   flex-grow: 1;
-  appearance: none; /* Remove default arrow */
+  appearance: none;
   background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23333%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-24.8%200L146.2%20185.4%2030.8%2069.4c-6.8-6.8-17.6-6.8-24.4%200-6.8%206.8-6.8%2017.6%200%2024.4l130.4%20130.4c6.8%206.8%2017.6%206.8%2024.4%200l130.4-130.4c6.8-6.8%206.8-17.6%20-.4-24.4z%22%2F%3E%3C%2Fsvg%3E");
   background-repeat: no-repeat;
   background-position: right 8px top 50%;
@@ -1758,8 +1759,8 @@ export default {
 
 .add-room-btn {
   background: none;
-  border: 1px dashed #dc3545; /* Dashed border as per image */
-  color: #dc3545; /* Red text */
+  border: 1px dashed #dc3545;
+  color: #dc3545;
   padding: 10px 15px;
   border-radius: 6px;
   font-size: 14px;
@@ -1770,14 +1771,14 @@ export default {
 }
 
 .add-room-btn:hover {
-  background: rgba(220, 53, 69, 0.05); /* Light red background on hover */
+  background: rgba(220, 53, 69, 0.05);
 }
 
 .room-modal-footer {
   border-top: 1px solid #eee;
   padding-top: 15px;
   display: flex;
-  justify-content: flex-end; /* Align button to the right */
+  justify-content: flex-end;
 }
 
 .apply-btn {
@@ -1804,10 +1805,10 @@ export default {
   padding: 8px 12px;
   border-radius: 4px;
   font-size: 12px;
-  z-index: 10003; /* Higher than modals */
+  z-index: 10003;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
   white-space: nowrap;
-  pointer-events: none; /* Allows clicks to pass through to underlying elements */
+  pointer-events: none;
 }
 
 /* Responsive Design */
@@ -1896,8 +1897,8 @@ export default {
   .map-modal-content,
   .room-modal-content,
   .continue-modal-content {
-    padding: 15px; /* Disesuaikan untuk tampilan responsif */
-    width: 95%; /* Disesuaikan untuk tampilan responsif */
+    padding: 15px;
+    width: 95%;
   }
 
   .gallery-modal-nav-revamped {
