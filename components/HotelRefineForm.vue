@@ -1,6 +1,6 @@
 <template>
   <div class="section">
-    <div class="section-header">Refine your holiday</div>
+    <h2 class="section-header">Refine your holiday</h2>
     <div class="section-content">
       <div class="form-field">
         <input
@@ -101,8 +101,9 @@ export default {
 .section-header {
   padding: 20px;
   border-bottom: 1px solid #eee;
-  font-size: 18px;
+  font-size: 24px;
   font-weight: bold;
+  color: #153b3c;
 }
 
 .section-content {

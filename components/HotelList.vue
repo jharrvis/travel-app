@@ -21,13 +21,33 @@
 
     <!-- Hotel Container - List View Only -->
     <div class="hotel-container hotel-list-view">
-      <HotelCard
-        v-for="hotel in paginatedHotels"
-        :key="hotel.id"
-        :hotel="hotel"
-        :search-data="searchData"
-        @hotel-click="$emit('hotel-click', hotel)"
-      />
+      <!-- Iterate over paginated hotels and insert banner at index 2 -->
+      <template v-for="(hotel, index) in paginatedHotels">
+        <HotelCard
+          :key="hotel.id"
+          :hotel="hotel"
+          :search-data="searchData"
+          @hotel-click="$emit('hotel-click', hotel)"
+        />
+        <!-- Banner insertion logic -->
+        <div
+          v-if="index === 2 && currentPage === 1"
+          class="banner-container"
+          :key="'banner-promo'"
+        >
+          <div class="banner-content">
+            <h2 class="banner-title">
+              <span class="gift-icon">🎁</span> Limited Time Offer: Free
+              Upgrades!
+            </h2>
+            <p class="banner-description">
+              Book select Dubai holidays and receive a complimentary room
+              upgrade and late check-out. Don't miss out!
+            </p>
+            <button class="banner-button">See Offers</button>
+          </div>
+        </div>
+      </template>
     </div>
 
     <!-- No Results -->
@@ -288,6 +308,59 @@ export default {
   display: flex;
   flex-direction: column;
   gap: 0; /* Remove gap since cards have their own margins */
+}
+
+/* Banner Styles */
+.banner-container {
+  margin: 0 0 20px;
+  padding: 20px;
+  border: 1px dashed #ac7872;
+  border-radius: 8px;
+  background-color: #fdf5f4;
+  text-align: center;
+}
+
+.banner-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.banner-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: #5a7d7c; /* Darker green for title */
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.gift-icon {
+  font-size: 24px;
+}
+
+.banner-description {
+  font-size: 15px;
+  color: #666;
+  margin: 0;
+  max-width: 600px;
+}
+
+.banner-button {
+  background: #ac7872; /* Button color */
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.banner-button:hover {
+  background: #8b5f5a; /* Darker shade on hover */
 }
 
 /* No Results */

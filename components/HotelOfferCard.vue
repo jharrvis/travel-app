@@ -8,7 +8,7 @@
     </div>
 
     <div class="offer-content">
-      <div class="hotel-offer-name">{{ offerData.hotelName }}</div>
+      <h2 class="hotel-offer-name">{{ offerData.hotelName }}</h2>
       <div class="offer-details">{{ offerData.details }}</div>
 
       <!-- Flight Information -->
@@ -306,10 +306,11 @@ export default {
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
   overflow: hidden;
   height: fit-content;
+  border: 2px solid #153b3c;
 }
 
 .offer-header {
-  background: #ac7872;
+  background: #153b3c;
   color: white;
   padding: 15px 20px;
   display: flex;
@@ -333,7 +334,7 @@ export default {
 }
 
 .hotel-offer-name {
-  font-size: 18px;
+  font-size: 22px;
   font-weight: bold;
   margin-bottom: 5px;
 }

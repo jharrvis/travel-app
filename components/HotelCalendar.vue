@@ -1,6 +1,6 @@
 <template>
   <div class="section">
-    <div class="section-header">Price & Availability</div>
+    <h2 class="section-header">Price & Availability</h2>
     <div class="calendar-section">
       <div class="calendar-header">
         <div class="selected-date">Selected Date: {{ selectedDateText }}</div>
@@ -239,8 +239,9 @@ export default {
 .section-header {
   padding: 20px;
   border-bottom: 1px solid #eee;
-  font-size: 18px;
+  font-size: 24px;
   font-weight: bold;
+  background: #e6d7cb;
 }
 
 .calendar-section {
