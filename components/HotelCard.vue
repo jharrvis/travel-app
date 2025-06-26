@@ -6,7 +6,16 @@
       <div class="hotel-image-container">
         <!-- Image Gallery -->
         <div class="image-gallery">
-          <img :src="getCurrentImage()" :alt="hotel.name" class="hotel-image" />
+          <!-- Tambahkan transisi pada gambar galeri -->
+          <transition name="fade-image" mode="out-in">
+            <img
+              :src="getCurrentImage()"
+              :alt="hotel.name"
+              class="hotel-image"
+              @click.stop="openGalleryModal(currentImageIndex)"
+              :key="currentImageIndex"
+            />
+          </transition>
 
           <!-- Gallery Navigation Arrows -->
           <button
@@ -145,7 +154,7 @@
               "
               @mouseleave="hideTooltip"
             >
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
+              <svg width="14" height="14" viewBox="0  0 24 24" fill="none">
                 <circle
                   cx="12"
                   cy="12"
@@ -314,12 +323,19 @@
           }}
           deposit.</strong
         >
-        <a href="#" class="deposit-link" @click.stop="showDepositBreakdown"
+        <a href="#" class="deposit-link" @click.stop="openDepositBreakdownModal"
           >See deposit breakdown</a
         >
         <div
           class="info-icon deposit-info-icon"
-          @click.stop="showDepositBreakdown"
+          @click.stop="openDepositBreakdownModal"
+          @mouseover="
+            showTooltip(
+              'This section provides a detailed breakdown of the deposit amount required to confirm your booking. It includes initial payments for both hotel and flight components.',
+              $event
+            )
+          "
+          @mouseleave="hideTooltip"
         >
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
             <circle
@@ -338,6 +354,19 @@
       <div class="continue-section">
         <button class="continue-btn" @click.stop="openContinueModal()">
           Continue
+          <svg
+            width="18"
+            height="18"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="white"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <polyline points="12 5 19 12 12 19"></polyline>
+            <line x1="19" y1="12" x2="5" y2="12"></line>
+          </svg>
         </button>
       </div>
     </div>
@@ -605,6 +634,89 @@
       </div>
     </div>
 
+    <!-- Deposit Breakdown Modal -->
+    <div
+      v-if="showDepositBreakdownModal"
+      class="modal-overlay"
+      @click.self="closeDepositBreakdownModal"
+    >
+      <div class="deposit-breakdown-modal-content">
+        <div class="deposit-breakdown-modal-header">
+          <h3>Deposit Breakdown</h3>
+          <button
+            class="close-modal-btn-revamped"
+            @click="closeDepositBreakdownModal"
+          >
+            <svg
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M18 6L6 18"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+              <path
+                d="M6 6L18 18"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </svg>
+          </button>
+        </div>
+        <div class="deposit-breakdown-modal-body">
+          <p>
+            Your deposit secures your booking and is part of the total holiday
+            cost. The remaining balance will be due closer to your departure
+            date.
+          </p>
+          <div class="breakdown-item">
+            <span>Hotel Deposit:</span>
+            <span>{{
+              formatPrice(
+                hotel.pricing?.deposit / 2 ||
+                  extractPrice(hotel.currentPrice) * 0.1
+              )
+            }}</span>
+          </div>
+          <div class="breakdown-item">
+            <span>Flight Deposit:</span>
+            <span>{{
+              formatPrice(
+                hotel.pricing?.deposit / 2 ||
+                  extractPrice(hotel.currentPrice) * 0.1
+              )
+            }}</span>
+          </div>
+          <div class="breakdown-item total">
+            <span>Total Deposit:</span>
+            <span>{{
+              formatPrice(
+                hotel.pricing?.deposit ||
+                  Math.round(extractPrice(hotel.currentPrice) * 0.2)
+              )
+            }}</span>
+          </div>
+          <p class="note">
+            Please note that deposit amounts may vary based on booking date and
+            specific offers. Full payment details will be provided at checkout.
+          </p>
+        </div>
+        <div class="deposit-breakdown-modal-footer">
+          <button class="ok-btn" @click="closeDepositBreakdownModal">
+            Got It
+          </button>
+        </div>
+      </div>
+    </div>
+
     <!-- Notification Container -->
     <transition name="fade">
       <div v-if="showNotification" class="notification">
@@ -652,6 +764,7 @@ export default {
       showMapModal: false, // New: to control map modal visibility
       showContinueModal: false, // New: to control continue confirmation modal
       showRoomModal: false, // New: to control rooms & guests modal visibility
+      showDepositBreakdownModal: false, // New: to control deposit breakdown modal visibility
       isFavorited: false, // New: to manage favorite state
       showNotification: false, // New: to control notification visibility
       notificationMessage: "", // New: to store notification message
@@ -746,9 +859,11 @@ export default {
     openGalleryModal(initialIndex) {
       this.galleryActiveImageIndex = initialIndex;
       this.showGalleryModal = true;
+      this.disableBodyScroll();
     },
     closeGalleryModal() {
       this.showGalleryModal = false;
+      this.enableBodyScroll();
     },
     nextGalleryImage() {
       if (this.hotel.gallery && this.hotel.gallery.length > 1) {
@@ -768,17 +883,21 @@ export default {
     // Map Modal Methods
     openMapModal() {
       this.showMapModal = true;
+      this.disableBodyScroll();
     },
     closeMapModal() {
       this.showMapModal = false;
+      this.enableBodyScroll();
     },
 
     // Continue Confirmation Modal Methods
     openContinueModal() {
       this.showContinueModal = true;
+      this.disableBodyScroll();
     },
     closeContinueModal() {
       this.showContinueModal = false;
+      this.enableBodyScroll();
     },
     confirmContinue() {
       this.closeContinueModal();
@@ -788,6 +907,7 @@ export default {
     // Rooms & Guests Modal Methods
     openRoomModal() {
       this.showRoomModal = true;
+      this.disableBodyScroll();
       // Initialize rooms array from currentRoom for editing
       this.rooms = [
         {
@@ -799,6 +919,7 @@ export default {
     },
     closeRoomModal() {
       this.showRoomModal = false;
+      this.enableBodyScroll();
     },
     addRoom() {
       this.rooms.push({ adults: 2, children: 0, mealPlan: "Half Board" });
@@ -825,6 +946,16 @@ export default {
       }
       this.closeRoomModal();
       this.showNotificationMessage("Room and meal plan updated successfully.");
+    },
+
+    // Deposit Breakdown Modal Methods
+    openDepositBreakdownModal() {
+      this.showDepositBreakdownModal = true;
+      this.disableBodyScroll();
+    },
+    closeDepositBreakdownModal() {
+      this.showDepositBreakdownModal = false;
+      this.enableBodyScroll();
     },
 
     // Favorite button method with notification
@@ -876,16 +1007,22 @@ export default {
       this.popoverContent = "";
     },
 
+    // Disable body scrolling when modal is open
+    disableBodyScroll() {
+      document.body.style.overflow = "hidden";
+    },
+
+    // Enable body scrolling when modal is closed
+    enableBodyScroll() {
+      document.body.style.overflow = "";
+    },
+
     showInfo() {
       console.log("Show info for hotel:", this.hotel.name);
     },
 
     showFlightInfo() {
       console.log("Show flight information");
-    },
-
-    showDepositBreakdown() {
-      console.log("Show deposit breakdown");
     },
   },
 };
@@ -909,7 +1046,7 @@ export default {
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 }
 
-/* SECTION 1: Hotel Main Section (Image & Content) */
+/* SECTION 1: Hotel Main Section (Image & Deskripsi) */
 .hotel-main-section {
   display: flex;
   min-height: 280px;
@@ -936,6 +1073,17 @@ export default {
   height: 100%;
   object-fit: cover;
   display: block;
+  cursor: pointer; /* Added cursor pointer to indicate clickability */
+}
+
+/* Transisi Fade untuk Gambar Galeri */
+.fade-image-enter-active,
+.fade-image-leave-active {
+  transition: opacity 0.5s ease;
+}
+.fade-image-enter-from,
+.fade-image-leave-to {
+  opacity: 0;
 }
 
 .gallery-arrow {
@@ -1316,10 +1464,10 @@ export default {
 .deposit-continue-section {
   display: flex;
   align-items: center;
-  padding: 16px 20px;
-  border-top: 1px solid #eee;
+  /* Removed padding from here */
   justify-content: space-between;
   background-color: white;
+  border-top: 1px solid #eee;
 }
 
 .deposit-info {
@@ -1330,6 +1478,7 @@ export default {
   align-items: center;
   gap: 4px;
   flex: 1;
+  padding: 16px 0 16px 20px; /* Added padding here */
 }
 
 .deposit-info-icon {
@@ -1346,13 +1495,21 @@ export default {
   background: #153b3c;
   color: white;
   border: none;
-  padding: 12px 24px;
-  border-radius: 6px;
+  padding: 16px 24px; /* Increased vertical padding for height */
+  /* Adjust border-radius to match the image */
+  border-top-left-radius: 8px;
+  border-top-right-radius: 0;
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 8px;
   font-size: 14px;
   font-weight: 600;
   cursor: pointer;
   transition: background 0.2s;
   white-space: nowrap;
+  display: flex; /* Make it a flex container */
+  align-items: center; /* Vertically align items */
+  gap: 8px; /* Space between text and arrow */
+  padding-right: 18px; /* Add some padding to the right for the arrow */
 }
 
 .continue-btn:hover {
@@ -1797,6 +1954,83 @@ export default {
   background: #0e2627;
 }
 
+/* Deposit Breakdown Modal Styles */
+.deposit-breakdown-modal-content {
+  background: white;
+  padding: 25px;
+  border-radius: 8px;
+  position: relative;
+  max-width: 500px;
+  width: 90%;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.deposit-breakdown-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 15px;
+  margin-bottom: 0;
+}
+
+.deposit-breakdown-modal-header h3 {
+  margin: 0;
+  font-size: 20px;
+  color: #333;
+}
+
+.deposit-breakdown-modal-body {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.deposit-breakdown-modal-body p {
+  font-size: 14px;
+  color: #555;
+  line-height: 1.5;
+  margin: 0;
+}
+
+.breakdown-item {
+  display: flex;
+  justify-content: space-between;
+  font-size: 15px;
+  color: #333;
+  padding: 5px 0;
+  border-bottom: 1px dashed #eee;
+}
+
+.breakdown-item:last-of-type {
+  border-bottom: none;
+}
+
+.breakdown-item.total {
+  font-weight: 600;
+  color: #153b3c;
+  font-size: 16px;
+  border-top: 1px solid #ddd;
+  padding-top: 10px;
+  margin-top: 10px;
+}
+
+.deposit-breakdown-modal-footer {
+  border-top: 1px solid #eee;
+  padding-top: 15px;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.note {
+  font-size: 12px !important;
+  color: #777 !important;
+  margin-top: 10px;
+}
+
 /* Popover Styles */
 .popover {
   position: fixed;
@@ -1807,8 +2041,12 @@ export default {
   font-size: 12px;
   z-index: 10003;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-  white-space: nowrap;
-  pointer-events: none;
+  /* Perbaikan layout popover */
+  white-space: normal; /* Allow text to wrap */
+  word-break: break-word; /* Break long words */
+  max-width: 250px; /* Lebar popover yang dipersempit */
+  text-align: left; /* Align text to left */
+  line-height: 1.4;
 }
 
 /* Responsive Design */
@@ -1896,7 +2134,8 @@ export default {
   .gallery-modal-content,
   .map-modal-content,
   .room-modal-content,
-  .continue-modal-content {
+  .continue-modal-content,
+  .deposit-breakdown-modal-content {
     padding: 15px;
     width: 95%;
   }
