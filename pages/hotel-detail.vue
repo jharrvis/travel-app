@@ -78,29 +78,36 @@
 
     <!-- Content Area -->
     <div class="page-section container">
-      <!-- Tab Navigation -->
-      <div class="tab-navigation">
-        <button
-          v-for="tab in tabs"
-          :key="tab.id"
-          class="tab-item"
-          :class="{ active: activeTab === tab.id }"
-          @click="setActiveTab(tab.id)"
-        >
-          {{ tab.label }}
-        </button>
+      <!-- Hotel Gallery Header -->
+      <HotelDetailHeader
+        v-if="currentHotelData"
+        :hotel-data="currentHotelData"
+        :initial-favorite="isFavorite"
+        @toggle-favorite="handleToggleFavorite"
+        @show-hotel-details="showHotelDetails"
+        @show-map="showMap"
+        @show-alternative-flights="scrollToAlternativeFlights"
+      />
+
+      <!-- Loading state -->
+      <div v-else class="loading-gallery">
+        <div class="loading-skeleton">
+          <div class="skeleton-main-image"></div>
+          <div class="skeleton-thumbnails">
+            <div class="skeleton-thumb" v-for="i in 4" :key="i"></div>
+          </div>
+        </div>
+        <div class="skeleton-hotel-info">
+          <div class="skeleton-stars"></div>
+          <div class="skeleton-title"></div>
+          <div class="skeleton-location"></div>
+          <div class="skeleton-rating"></div>
+        </div>
       </div>
 
       <div class="content-wrapper">
-        <!-- Left Column -->
+        <!-- Left Column: HotelRefineForm -->
         <div class="left-column">
-          <HotelCalendar
-            :initial-selected-date="selectedDate"
-            @date-selected="handleDateSelected"
-            @price-toggle="handlePriceToggle"
-          />
-
-          <!-- Refine Your Holiday -->
           <HotelRefineForm
             :form-data="refineFormData"
             :guarantee="guaranteeData"
@@ -109,17 +116,17 @@
           />
         </div>
 
-        <!-- Right Column -->
-        <div class="right-column">
-          <!-- Hotel Information -->
-          <HotelDetailHeader
-            :hotel-data="hotelData"
-            :initial-favorite="isFavorite"
-            @toggle-favorite="handleToggleFavorite"
-            @show-hotel-details="showHotelDetails"
-            @show-map="showMap"
-            @show-alternative-flights="scrollToAlternativeFlights"
+        <!-- Middle Column: HotelCalendar -->
+        <div class="middle-column">
+          <HotelCalendar
+            :initial-selected-date="selectedDate"
+            @date-selected="handleDateSelected"
+            @price-toggle="handlePriceToggle"
           />
+        </div>
+
+        <!-- Right Column: HotelOfferCard -->
+        <div class="right-column">
           <HotelOfferCard
             :offer-data="currentOffer"
             @select-holiday="handleSelectHoliday"
@@ -184,24 +191,37 @@ export default {
       flightData, // Import langsung data JSON
       isModalVisible: false,
       phoneNumber: "01204 269010",
-      activeTab: "flights-hotel",
       isFavorite: false,
       selectedDate: { day: 30, month: 10, year: 2025 },
       selectedPaymentOption: "",
       currentFlightIndex: 0, // Index flight yang sedang aktif
-      tabs: [
-        { id: "flights-hotel", label: "Flights + Hotel" },
-        { id: "hotel-only", label: "Hotel only" },
-      ],
-      hotelData: {
+      currentHotelData: null, // Data hotel yang sedang ditampilkan
+      searchResultsData: null, // Data search results dari JSON
+
+      // Default hotel data sebagai fallback
+      defaultHotelData: {
         name: "Jumeirah Beach Hotel",
         location: "Jumeirah Beach, Dubai, United Arab Emirates",
         stars: 5,
-        rating: 5,
+        rating: 4.5,
         reviewCount: "5,124",
         mainImage:
-          "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=400&h=200&fit=crop",
-        imageCounter: "1/86",
+          "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800&h=600&fit=crop",
+        gallery: [
+          "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800&h=600&fit=crop",
+          "https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?w=800&h=600&fit=crop",
+          "https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=800&h=600&fit=crop",
+          "https://images.unsplash.com/photo-1582719508461-905c673771fd?w=800&h=600&fit=crop",
+          "https://images.unsplash.com/photo-1584132967334-10e028bd69f7?w=800&h=600&fit=crop",
+        ],
+        description:
+          "Distinctive wave-shaped beachfront resort offering uninterrupted views of the Arabian Gulf and world-class facilities.",
+        amenities: [
+          "Private Beach",
+          "Wild Wadi Waterpark Access",
+          "Family Entertainment",
+        ],
+        imageCounter: "1/5",
       },
       refineFormData: {
         airport: "✈️ Any airport",
@@ -226,7 +246,7 @@ export default {
         title: "Flight & Hotel Offer",
         badge: flight.price.amount <= 1400 ? "Best Price" : "Best Offer",
         isBestOffer: true,
-        hotelName: "Jumeirah Beach Hotel",
+        hotelName: this.currentHotelData?.name || "Jumeirah Beach Hotel",
         details: `${this.formatDate(
           flight.outbound.date
         )} (5 nights)\nBreakfast included`,
@@ -289,8 +309,9 @@ export default {
       };
     },
   },
-  mounted() {
+  async mounted() {
     this.initStickyCTA();
+    await this.loadHotelData();
   },
   methods: {
     // Modal methods
@@ -310,6 +331,53 @@ export default {
         top: 0,
         behavior: "smooth",
       });
+    },
+
+    // Load hotel data from JSON
+    async loadHotelData() {
+      try {
+        // Get hotelId from URL query
+        const hotelId = this.$route.query.hotelId;
+
+        if (!hotelId) {
+          console.warn("No hotelId provided in URL");
+          // Use default data
+          this.currentHotelData = this.defaultHotelData;
+          return;
+        }
+
+        // Load search results data
+        const response = await fetch("/data/search-results.json");
+        this.searchResultsData = await response.json();
+
+        // Find hotel by ID
+        const hotel = this.searchResultsData.search_results.hotels.find(
+          (h) => h.id.toString() === hotelId.toString()
+        );
+
+        if (hotel) {
+          this.currentHotelData = {
+            name: hotel.name,
+            location: hotel.location,
+            stars: hotel.stars,
+            rating: hotel.rating,
+            reviewCount: hotel.reviews.toLocaleString(),
+            mainImage: hotel.main_image,
+            gallery: hotel.gallery || [hotel.main_image],
+            imageCounter: `1/${hotel.gallery ? hotel.gallery.length : 1}`,
+            description: hotel.description,
+            amenities: hotel.amenities || [],
+          };
+        } else {
+          console.warn("Hotel not found with ID:", hotelId);
+          // Fallback to default data
+          this.currentHotelData = this.defaultHotelData;
+        }
+      } catch (error) {
+        console.error("Error loading hotel data:", error);
+        // Fallback to default data
+        this.currentHotelData = this.defaultHotelData;
+      }
     },
 
     // Scroll to Alternative Flights section
@@ -359,11 +427,6 @@ export default {
       }
     },
 
-    // Tab methods
-    setActiveTab(tabId) {
-      this.activeTab = tabId;
-    },
-
     // Hotel methods
     handleToggleFavorite(data) {
       this.isFavorite = data.isFavorite;
@@ -396,7 +459,8 @@ export default {
     // Offer methods
     handleSelectHoliday(data) {
       console.log("Select holiday:", data);
-      alert("Proceeding to booking...");
+      // Changed from alert to console.log as alerts are not supported
+      console.log("Proceeding to booking...");
     },
 
     // Flight methods
@@ -472,46 +536,27 @@ export default {
   padding: 20px;
 }
 
-/* Tab Navigation */
-.tab-navigation {
-  display: flex;
-  margin-bottom: 30px;
-  border-bottom: 1px solid #ddd;
-}
-
-.tab-item {
-  padding: 12px 24px;
-  background: none;
-  border: none;
-  border-bottom: 3px solid transparent;
-  cursor: pointer;
-  font-size: 16px;
-  font-weight: 500;
-  color: #666;
-  transition: all 0.2s;
-}
-
-.tab-item.active {
-  color: #333;
-  border-bottom-color: #ac7872;
-}
-
-.tab-item:hover {
-  color: #333;
-}
-
-/* Content Layout */
+/* Content Layout for 3 Columns */
 .content-wrapper {
-  display: flex;
-  gap: 30px;
+  display: grid; /* Use CSS Grid for 3 columns */
+  grid-template-columns: 1fr 2fr 1.2fr; /* Adjust column widths as per image */
+  gap: 30px; /* Gap between columns */
+  margin-top: 30px;
 }
 
 .left-column {
-  flex: 1;
+  /* This column contains HotelRefineForm */
+  /* flex: 1; is no longer needed with grid-template-columns */
+}
+
+.middle-column {
+  /* New column for HotelCalendar */
+  /* flex: 1; is no longer needed with grid-template-columns */
 }
 
 .right-column {
-  flex: 1;
+  /* This column contains HotelOfferCard */
+  /* flex: 1; is no longer needed with grid-template-columns */
 }
 
 /* Alternative Flights Section */
@@ -527,14 +572,30 @@ export default {
 }
 
 /* Responsive Design */
+@media (max-width: 1200px) {
+  .content-wrapper {
+    grid-template-columns: 1fr 1fr; /* Two columns on medium screens */
+  }
+  .middle-column {
+    grid-column: span 1; /* Ensure middle column takes 1 span */
+  }
+  .right-column {
+    grid-column: span 1; /* Ensure right column takes 1 span */
+  }
+}
+
 @media (max-width: 1024px) {
   .content-wrapper {
-    flex-direction: column;
+    grid-template-columns: 1fr; /* Single column on smaller screens */
+    gap: 20px;
+    margin-top: 20px;
   }
 
   .left-column,
+  .middle-column,
   .right-column {
     width: 100%;
+    grid-column: auto; /* Reset grid-column for single column layout */
   }
 }
 
@@ -547,28 +608,129 @@ export default {
     padding: 15px;
   }
 
-  .tab-navigation {
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: none;
-    -ms-overflow-style: none;
-  }
-
-  .tab-navigation::-webkit-scrollbar {
-    display: none;
-  }
-
-  .tab-item {
-    white-space: nowrap;
-    min-width: auto;
-  }
-
   .content-wrapper {
     gap: 20px;
+    margin-top: 20px;
   }
 
   .alternative-flights-full-width {
     margin-top: 20px;
+  }
+}
+
+/* Loading Skeleton Styles */
+.loading-gallery {
+  margin-bottom: 30px;
+}
+
+.loading-skeleton {
+  display: grid;
+  grid-template-columns: 1fr 200px;
+  gap: 20px;
+  margin-bottom: 25px;
+  height: 400px;
+}
+
+.skeleton-main-image {
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: 16px;
+}
+
+.skeleton-thumbnails {
+  display: grid;
+  grid-template-rows: repeat(4, 1fr);
+  gap: 8px;
+}
+
+.skeleton-thumb {
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: 12px;
+  height: 92px;
+}
+
+.skeleton-hotel-info {
+  padding: 20px 0;
+}
+
+.skeleton-stars {
+  width: 120px;
+  height: 20px;
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: 4px;
+  margin-bottom: 12px;
+}
+
+.skeleton-title {
+  width: 60%;
+  height: 32px;
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: 4px;
+  margin-bottom: 12px;
+}
+
+.skeleton-location {
+  width: 80%;
+  height: 16px;
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: 4px;
+  margin-bottom: 16px;
+}
+
+.skeleton-rating {
+  width: 40%;
+  height: 16px;
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: 4px;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+@media (max-width: 1024px) {
+  .loading-skeleton {
+    grid-template-columns: 1fr 150px;
+    height: 350px;
+  }
+}
+
+@media (max-width: 768px) {
+  .loading-skeleton {
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr auto;
+    height: auto;
+  }
+
+  .skeleton-main-image {
+    height: 300px;
+  }
+
+  .skeleton-thumbnails {
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: 1fr;
+    height: 80px;
+    margin-top: 12px;
+  }
+
+  .skeleton-thumb {
+    height: 80px;
   }
 }
 </style>
