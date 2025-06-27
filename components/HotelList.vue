@@ -312,7 +312,7 @@ export default {
 
 /* Banner Styles */
 .banner-container {
-  margin: 0 0 20px;
+  margin: 0 0 20px 0;
   padding: 20px;
   border: 1px dashed #ac7872;
   border-radius: 8px;

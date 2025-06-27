@@ -319,7 +319,15 @@
           <!-- Duration Pills - Horizontal scrollable -->
           <div class="flights-list-header">
             <div class="duration-pills-wrapper">
-              <div class="duration-pills-container">
+              <div
+                class="duration-pills-container"
+                ref="durationPillsContainer"
+                @mousedown="startDrag"
+                @mouseleave="stopDrag"
+                @mouseup="stopDrag"
+                @mousemove="onDrag"
+                @wheel.prevent="handleMouseWheel"
+              >
                 <div class="duration-pills">
                   <div
                     v-for="(period, index) in durationPeriods"
@@ -449,13 +457,11 @@
                     </div>
                     <div class="flight-connecting-line"></div>
                     <div class="flight-duration-info">
-                      <div class="flight-duration-badges">
-                        <div class="duration-badge">
-                          ⏱️ {{ flight.inbound.duration }}
-                        </div>
-                        <div class="duration-badge">
-                          {{ getStopsText(flight.inbound.stops) }} ●
-                        </div>
+                      <div class="duration-badge">
+                        ⏱️ {{ flight.inbound.duration }}
+                      </div>
+                      <div class="duration-badge">
+                        {{ getStopsText(flight.inbound.stops) }} ●
                       </div>
                     </div>
                     <div class="flight-time-row">
@@ -743,6 +749,11 @@ export default {
       filteredFlights: [],
       minDuration: 7.5,
       maxDuration: 13.5,
+
+      // State for drag-to-scroll functionality
+      isDragging: false,
+      startX: 0,
+      scrollLeft: 0,
     };
   },
 
@@ -1019,6 +1030,7 @@ export default {
         Lufthansa: "lufthansa",
         "Pegasus Airlines": "pegasus-airlines",
         "Qatar Airways": "qatar-airways",
+        Saudia: "saudia",
         "Swiss International Air Lines": "swiss",
         "Virgin Atlantic": "virgin-atlantic",
       };
@@ -1038,11 +1050,49 @@ export default {
       const minutes = parseInt(duration.match(/(\d+)m/)?.[1] || 0);
       return hours + minutes / 60;
     },
+
+    // --- Drag-to-scroll methods ---
+    startDrag(e) {
+      this.isDragging = true;
+      this.startX = e.pageX - this.$refs.durationPillsContainer.offsetLeft;
+      this.scrollLeft = this.$refs.durationPillsContainer.scrollLeft;
+      // Change cursor to grabbing
+      this.$refs.durationPillsContainer.style.cursor = "grabbing";
+      this.$refs.durationPillsContainer.style.userSelect = "none";
+    },
+
+    onDrag(e) {
+      if (!this.isDragging) return;
+      e.preventDefault(); // Mencegah pemilihan teks saat menyeret
+      const x = e.pageX - this.$refs.durationPillsContainer.offsetLeft;
+      const walk = (x - this.startX) * 1; // Kecepatan scroll, sesuaikan jika perlu
+      this.$refs.durationPillsContainer.scrollLeft = this.scrollLeft - walk;
+    },
+
+    stopDrag() {
+      this.isDragging = false;
+      // Kembalikan kursor ke normal
+      this.$refs.durationPillsContainer.style.cursor = "grab";
+      this.$refs.durationPillsContainer.style.removeProperty("user-select");
+    },
+
+    // --- Mouse wheel scroll method ---
+    handleMouseWheel(e) {
+      // Gulir horizontal dengan roda mouse vertikal
+      this.$refs.durationPillsContainer.scrollLeft += e.deltaY;
+    },
+  },
+  mounted() {
+    // Set initial cursor style
+    if (this.$refs.durationPillsContainer) {
+      this.$refs.durationPillsContainer.style.cursor = "grab";
+    }
   },
 };
 </script>
 
 <style scoped>
+/* Kontainer utama untuk daftar penerbangan dan sidebar */
 .flights-content {
   display: flex;
   gap: 20px;
@@ -1051,22 +1101,26 @@ export default {
   box-sizing: border-box;
 }
 
+/* Sidebar untuk filter */
 .sidebar {
   width: 280px;
   flex-shrink: 0;
 }
 
+/* Daftar penerbangan */
 .flights-list {
   flex: 1;
-  min-width: 0; /* ⚠️ penting agar flex item tidak overflow */
-  overflow: hidden; /* mencegah isi meluap */
+  min-width: 0; /* Penting agar flex item tidak overflow */
+  overflow: hidden; /* Mencegah isi meluap */
   box-sizing: border-box;
 }
 
+/* Bagian filter individu */
 .filter-section {
   margin-bottom: 20px;
 }
 
+/* Judul filter yang bisa diklik untuk membuka/menutup */
 .filter-title {
   display: flex;
   align-items: center;
@@ -1076,6 +1130,7 @@ export default {
   padding: 10px 0;
 }
 
+/* Ikon panah di judul filter */
 .filter-title .arrow {
   width: 16px;
   height: 16px;
@@ -1083,26 +1138,31 @@ export default {
   transition: transform 0.3s;
 }
 
+/* Rotasi panah saat filter ditutup */
 .filter-title .arrow.collapsed {
   transform: rotate(-90deg);
 }
 
+/* Konten filter yang bisa terbuka/tertutup */
 .filter-content {
   max-height: 300px;
   overflow-y: auto;
   transition: max-height 0.3s ease-out;
 }
 
+/* Menyembunyikan konten filter saat ditutup */
 .filter-content.collapsed {
   max-height: 0;
 }
 
+/* Daftar item di dalam filter */
 .filter-list {
   display: flex;
   flex-direction: column;
   gap: 10px;
 }
 
+/* Item filter individual */
 .filter-item {
   display: flex;
   align-items: center;
@@ -1111,10 +1171,12 @@ export default {
   padding: 2px 0;
 }
 
+/* Efek hover pada item filter */
 .filter-item:hover {
   color: #ac7872;
 }
 
+/* Bagian kiri item filter (checkbox dan label) */
 .filter-item-left {
   display: flex;
   align-items: center;
@@ -1122,6 +1184,7 @@ export default {
   flex: 1;
 }
 
+/* Kotak checkbox kustom */
 .filter-checkbox {
   width: 16px;
   height: 16px;
@@ -1133,18 +1196,21 @@ export default {
   cursor: pointer;
 }
 
+/* Gaya checkbox saat dicentang */
 .filter-checkbox.checked {
   background: #ac7872;
   border-color: #ac7872;
   color: white;
 }
 
+/* Tanda centang pada checkbox yang dicentang */
 .filter-checkbox.checked::after {
   content: "✓";
   font-size: 12px;
   font-weight: bold;
 }
 
+/* Logo maskapai di filter */
 .airline-logo-filter {
   width: 44px;
   height: 16px;
@@ -1153,19 +1219,23 @@ export default {
   border-radius: 2px;
 }
 
+/* Label teks untuk filter */
 .filter-label {
   font-size: 14px;
 }
 
+/* Harga di samping filter */
 .filter-price {
   font-size: 13px;
   color: #666;
 }
 
+/* Kontainer untuk rentang durasi */
 .duration-range-container {
   padding: 15px 0;
 }
 
+/* Label untuk rentang durasi */
 .duration-range-labels {
   text-align: center;
   margin-bottom: 15px;
@@ -1173,6 +1243,7 @@ export default {
   color: #666;
 }
 
+/* Slider durasi */
 .duration-slider {
   position: relative;
   height: 4px;
@@ -1180,6 +1251,7 @@ export default {
   border-radius: 2px;
 }
 
+/* Jalur slider */
 .slider-track {
   position: absolute;
   width: 100%;
@@ -1188,6 +1260,7 @@ export default {
   border-radius: 2px;
 }
 
+/* Rentang yang dipilih pada slider */
 .slider-range {
   position: absolute;
   height: 100%;
@@ -1195,6 +1268,7 @@ export default {
   border-radius: 2px;
 }
 
+/* Thumb slider */
 .slider-thumb {
   position: absolute;
   width: 16px;
@@ -1205,38 +1279,45 @@ export default {
   cursor: pointer;
 }
 
+/* Header daftar penerbangan */
 .flights-list-header {
   margin-bottom: 20px;
 }
 
+/* Wrapper untuk pills durasi, memastikan lebar penuh dan padding */
 .duration-pills-wrapper {
   width: 100%;
-  overflow: hidden;
-  padding-bottom: 5px;
+  padding-bottom: 5px; /* Memberi ruang untuk scrollbar jika ada */
+  box-sizing: border-box; /* Pastikan padding disertakan dalam lebar */
 }
 
+/* Kontainer untuk pills durasi yang bisa di-scroll */
 .duration-pills-container {
-  overflow-x: auto;
-  overflow-y: hidden;
-  -webkit-overflow-scrolling: touch;
-  scrollbar-width: none; /* Firefox */
-  -ms-overflow-style: none; /* IE 10+ */
+  overflow-x: auto; /* Mengaktifkan scroll horizontal */
+  overflow-y: hidden; /* Menyembunyikan scrollbar vertikal */
+  -webkit-overflow-scrolling: touch; /* Untuk scrolling yang lebih baik di iOS */
+  scrollbar-width: none; /* Menyembunyikan scrollbar di Firefox */
+  -ms-overflow-style: none; /* Menyembunyikan scrollbar di IE 10+ */
+  cursor: grab; /* Kursor default saat tidak menyeret */
 }
 
+/* Menyembunyikan scrollbar di Chrome/Safari */
 .duration-pills-container::-webkit-scrollbar {
-  display: none; /* Chrome/Safari */
+  display: none;
 }
 
+/* Kontainer flex untuk pills durasi */
 .duration-pills {
   display: flex;
   gap: 15px;
-  min-width: 100%; /* Tambahkan baris ini */
-  width: max-content; /* Tambahkan baris ini */
-  min-width: 100%;
-  width: max-content;
-  padding: 0 10px; /* optional padding */
+  white-space: nowrap; /* Mencegah pills wraps ke baris berikutnya */
+  min-width: max-content; /* Memastikan lebar cukup untuk semua pills, memungkinkan overflow dan scroll */
+  padding: 0 10px; /* Padding opsional di sisi kiri/kanan dalam kontainer scroll */
+  position: relative; /* Menambahkan posisi relatif */
+  z-index: 1; /* Menambahkan z-index */
 }
 
+/* Setiap pill durasi */
 .duration-pill {
   background: transparent;
   border: none;
@@ -1245,31 +1326,35 @@ export default {
   cursor: pointer;
   transition: all 0.2s;
   text-align: center;
-  white-space: nowrap;
-  flex-shrink: 0;
+  flex-shrink: 0; /* Mencegah pills menyusut */
 }
 
+/* Efek hover pada pill durasi */
 .duration-pill:hover {
   color: #ac7872;
 }
 
+/* Gaya pill durasi yang aktif */
 .duration-pill.active {
   color: #ac7872;
   border-bottom-color: #ac7872;
 }
 
+/* Label teks pada pill durasi */
 .duration-pill-label {
   display: block;
   font-weight: bold;
   font-size: 12px;
 }
 
+/* Harga pada pill durasi */
 .duration-pill-price {
   display: block;
   font-size: 11px;
   opacity: 0.8;
 }
 
+/* Kartu penerbangan individu */
 .flight-card {
   border: 1px solid #ddd;
   border-radius: 12px;
@@ -1282,16 +1367,19 @@ export default {
   position: relative;
 }
 
+/* Efek hover pada kartu penerbangan */
 .flight-card:hover {
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 }
 
+/* Gaya kartu penerbangan yang dipilih */
 .flight-card.selected-flight {
   border-color: #ac7872;
   background: #fefefe;
   box-shadow: 0 4px 15px rgba(172, 120, 114, 0.2);
 }
 
+/* Lencana "Current Selection" */
 .current-flight-badge {
   position: absolute;
   top: -1px;
@@ -1305,6 +1393,7 @@ export default {
   z-index: 2;
 }
 
+/* Bagian detail penerbangan (kolom kiri) */
 .flight-details-section {
   flex: 1;
   padding: 20px;
@@ -1313,6 +1402,7 @@ export default {
   gap: 0;
 }
 
+/* Setiap baris penerbangan (outbound/inbound) */
 .flight-row {
   display: flex;
   align-items: center;
@@ -1321,10 +1411,12 @@ export default {
   border-bottom: 1px solid #f0f0f0;
 }
 
+/* Menghilangkan border bawah pada baris terakhir */
 .flight-row:last-child {
   border-bottom: none;
 }
 
+/* Info tanggal penerbangan */
 .flight-date-info {
   display: flex;
   align-items: center;
@@ -1332,27 +1424,32 @@ export default {
   min-width: 140px;
 }
 
+/* Ikon penerbangan */
 .flight-icon {
   font-size: 16px;
   width: 20px;
 }
 
+/* Teks tanggal penerbangan */
 .flight-date-text {
   display: flex;
   flex-direction: column;
 }
 
+/* Tanggal utama penerbangan */
 .flight-date-main {
   font-weight: bold;
   font-size: 14px;
   color: #333;
 }
 
+/* Arah penerbangan (outbound/inbound) */
 .flight-direction {
   font-size: 12px;
   color: #666;
 }
 
+/* Waktu penerbangan */
 .flight-times {
   display: flex;
   align-items: flex-start;
@@ -1360,6 +1457,7 @@ export default {
   flex: 1;
 }
 
+/* Grup waktu penerbangan */
 .flight-time-group {
   display: flex;
   flex-direction: column;
@@ -1367,6 +1465,7 @@ export default {
   min-width: 250px;
 }
 
+/* Baris waktu (titik, waktu, bandara) */
 .flight-time-row {
   display: flex;
   align-items: center;
@@ -1374,10 +1473,12 @@ export default {
   margin-bottom: 8px;
 }
 
+/* Menghilangkan margin bawah pada baris waktu terakhir */
 .flight-time-row:last-child {
   margin-bottom: 0;
 }
 
+/* Titik pada garis waktu */
 .flight-dot {
   width: 6px;
   height: 6px;
@@ -1388,6 +1489,7 @@ export default {
   z-index: 2;
 }
 
+/* Garis penghubung antara titik waktu */
 .flight-connecting-line {
   position: absolute;
   left: 2.5px;
@@ -1398,6 +1500,7 @@ export default {
   z-index: 1;
 }
 
+/* Waktu spesifik */
 .flight-time {
   font-weight: bold;
   font-size: 16px;
@@ -1405,12 +1508,14 @@ export default {
   min-width: 60px;
 }
 
+/* Nama bandara */
 .flight-airport {
   color: #666;
   font-size: 14px;
   flex: 1;
 }
 
+/* Info durasi penerbangan */
 .flight-duration-info {
   display: flex;
   align-items: center;
@@ -1419,11 +1524,13 @@ export default {
   margin-bottom: 8px;
 }
 
+/* Badge durasi penerbangan */
 .flight-duration-badges {
   display: flex;
   gap: 5px;
 }
 
+/* Gaya badge durasi */
 .duration-badge {
   background-color: #f0f0f0;
   color: #666;
@@ -1435,6 +1542,7 @@ export default {
   gap: 3px;
 }
 
+/* Bagian maskapai */
 .airline-section {
   display: flex;
   flex-direction: column;
@@ -1443,6 +1551,7 @@ export default {
   min-width: 70px;
 }
 
+/* Logo maskapai */
 .airline-logo {
   width: 60px;
   height: 24px;
@@ -1450,12 +1559,14 @@ export default {
   background: white;
 }
 
+/* Nomor penerbangan */
 .flight-number {
   font-size: 11px;
   color: #666;
   text-align: center;
 }
 
+/* Bagian harga penerbangan (kolom kanan) */
 .flight-pricing-section {
   display: flex;
   flex-direction: column;
@@ -1467,6 +1578,7 @@ export default {
   border-left: 1px solid #f0f0f0;
 }
 
+/* Harga penerbangan */
 .flight-price {
   font-size: 32px;
   font-weight: bold;
@@ -1474,12 +1586,14 @@ export default {
   line-height: 1;
 }
 
+/* Catatan harga (pp) */
 .flight-price-note {
   font-size: 16px;
   color: #666;
   margin-bottom: 15px;
 }
 
+/* Tombol pilih penerbangan */
 .flight-select-btn {
   background: #153b3c;
   color: white;
@@ -1492,25 +1606,29 @@ export default {
   font-size: 14px;
 }
 
+/* Efek hover pada tombol pilih penerbangan */
 .flight-select-btn:hover:not(:disabled) {
   background: #0f2b2c;
 }
 
+/* Gaya tombol pilih penerbangan yang sudah dipilih */
 .flight-select-btn.selected {
   background: #ac7872;
   cursor: default;
 }
 
+/* Gaya tombol pilih penerbangan yang dinonaktifkan */
 .flight-select-btn:disabled {
-  cursor: default;
   opacity: 0.8;
 }
 
+/* Pesan "No Results" */
 .no-results {
   text-align: center;
   padding: 40px;
 }
 
+/* Tombol reset filter */
 .reset-filters-btn {
   background: #ac7872;
   color: white;
@@ -1521,6 +1639,7 @@ export default {
   margin-top: 15px;
 }
 
+/* Kontainer paginasi */
 .pagination-container {
   display: flex;
   justify-content: flex-start;
@@ -1529,12 +1648,14 @@ export default {
   border-top: 1px solid #eee;
 }
 
+/* Paginasi */
 .pagination {
   display: flex;
   align-items: center;
   gap: 8px;
 }
 
+/* Tombol paginasi */
 .pagination-btn {
   width: 36px;
   height: 36px;
@@ -1552,22 +1673,26 @@ export default {
   color: #666;
 }
 
+/* Efek hover pada tombol paginasi */
 .pagination-btn:hover:not(:disabled) {
   border-color: #ac7872;
   color: #ac7872;
 }
 
+/* Gaya tombol paginasi yang aktif */
 .pagination-btn.active {
   background: #333;
   color: white;
   border-color: #333;
 }
 
+/* Gaya tombol paginasi yang dinonaktifkan */
 .pagination-btn:disabled {
   opacity: 0.5;
   cursor: not-allowed;
 }
 
+/* Media queries untuk responsivitas */
 @media (max-width: 1200px) {
   .flights-content {
     flex-direction: column;
@@ -1637,7 +1762,8 @@ export default {
   }
 
   .duration-pills {
-    justify-content: center;
+    justify-content: flex-start; /* Mengatur agar pills dimulai dari kiri pada layar kecil */
+    padding: 0 10px; /* Menambahkan padding horizontal untuk kenyamanan scroll */
   }
 }
 </style>
