@@ -347,7 +347,6 @@
         </div>
       </div>
     </nav>
-    <div style="margin-top: 70px">&nbsp;</div>
   </header>
 </template>
 

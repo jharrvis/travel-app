@@ -311,6 +311,7 @@ export default {
 .search-area {
   padding: 0;
   min-height: 100vh;
+  margin-top: 110px;
 }
 
 .content-wrapper {
@@ -335,6 +336,10 @@ export default {
 
 /* Responsive Design */
 @media (max-width: 1200px) {
+  .search-area {
+    margin-top: 70px;
+  }
+
   .content-wrapper {
     flex-direction: column;
     gap: 20px;
