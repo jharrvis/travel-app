@@ -6,18 +6,32 @@
           <h2 class="recently-viewed-title">Recently viewed hotels</h2>
           <div class="carousel-navigation">
             <button
-              class="carousel-btn"
+              class="carousel-btn prev-btn"
               @click="previousSlide"
               :disabled="currentSlide === 0"
             >
-              ‹
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                fill="currentColor"
+                class="arrow-icon"
+              >
+                <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z" />
+              </svg>
             </button>
             <button
-              class="carousel-btn"
+              class="carousel-btn next-btn"
               @click="nextSlide"
               :disabled="currentSlide >= maxSlides"
             >
-              ›
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                fill="currentColor"
+                class="arrow-icon"
+              >
+                <path d="M8.59 16.59L10 18l6-6-6-6-1.41 1.41L13.17 12z" />
+              </svg>
             </button>
           </div>
         </div>
@@ -26,7 +40,7 @@
           <div
             class="carousel-wrapper"
             :style="{
-              transform: `translateX(-${currentSlide * slideWidth}px)`,
+              transform: `translateX(-${currentSlide * itemWidthWithGap}px)`,
             }"
           >
             <div
@@ -73,7 +87,9 @@ export default {
   data() {
     return {
       currentSlide: 0,
-      slideWidth: 300, // 280px + 20px gap
+      itemWidth: 0, // This will be calculated dynamically
+      gap: 20, // Gap between items
+      itemsPerSlideDesktop: 3, // Number of items to display on desktop
       recentlyViewedHotels: [
         {
           id: 1,
@@ -140,20 +156,32 @@ export default {
   },
 
   computed: {
+    itemWidthWithGap() {
+      return this.itemWidth + this.gap;
+    },
     maxSlides() {
-      // Calculate max slides based on container width
-      // Assuming 4 items visible at once on desktop
-      return Math.max(0, this.recentlyViewedHotels.length - 4);
+      // For desktop, we want 3 items visible, so the max slides are total items - 3
+      if (window.innerWidth >= 1024) {
+        // Assuming 1024px as desktop breakpoint
+        return Math.max(
+          0,
+          this.recentlyViewedHotels.length - this.itemsPerSlideDesktop
+        );
+      } else {
+        // For smaller screens, revert to previous logic or adjust as needed
+        return Math.max(0, this.recentlyViewedHotels.length - 1); // For example, 1 item at a time for mobile/tablet
+      }
     },
   },
 
   mounted() {
-    this.calculateSlideWidth();
-    window.addEventListener("resize", this.calculateSlideWidth);
+    this.calculateItemWidth();
+    window.addEventListener("resize", this.calculateItemWidth);
   },
 
-  beforeDestroy() {
-    window.removeEventListener("resize", this.calculateSlideWidth);
+  beforeUnmount() {
+    // Changed from beforeDestroy to beforeUnmount for Vue 3 compatibility
+    window.removeEventListener("resize", this.calculateItemWidth);
   },
 
   methods: {
@@ -179,15 +207,26 @@ export default {
       }
     },
 
-    calculateSlideWidth() {
-      // Responsive slide width calculation
-      const containerWidth = window.innerWidth;
-      if (containerWidth <= 768) {
-        this.slideWidth = 260; // Mobile: smaller cards
-      } else if (containerWidth <= 1024) {
-        this.slideWidth = 280; // Tablet
-      } else {
-        this.slideWidth = 300; // Desktop
+    calculateItemWidth() {
+      const carouselContainer = this.$el.querySelector(".carousel-container");
+      if (carouselContainer) {
+        const containerWidth = carouselContainer.offsetWidth;
+
+        if (window.innerWidth >= 1024) {
+          // Desktop
+          // Calculate item width for 3 items with gaps
+          this.itemWidth =
+            (containerWidth - this.gap * (this.itemsPerSlideDesktop - 1)) /
+            this.itemsPerSlideDesktop;
+        } else if (window.innerWidth >= 768) {
+          // Tablet
+          // Display 2 items
+          this.itemWidth = (containerWidth - this.gap) / 2;
+        } else {
+          // Mobile
+          // Display 1 item
+          this.itemWidth = containerWidth;
+        }
       }
     },
   },
@@ -195,13 +234,28 @@ export default {
 </script>
 
 <style scoped>
-/* Styles are handled by main.css, but we can add component-specific styles here if needed */
+/* Ensure the container for the carousel handles overflow */
+.carousel-container {
+  overflow: hidden;
+  position: relative; /* Needed for absolute positioning of arrows if desired */
+}
+
 .carousel-wrapper {
+  display: flex;
   transition: transform 0.3s ease;
+  gap: 20px; /* This creates the gap between items */
 }
 
 .recently-viewed-item {
+  flex: 0 0 auto; /* Prevent items from shrinking */
+  width: var(--item-width); /* Use CSS variable for dynamic width */
   transition: transform 0.3s ease, box-shadow 0.3s ease;
+  box-sizing: border-box; /* Include padding and border in the element's total width and height */
+}
+
+/* Set item width dynamically using CSS variable */
+.recently-viewed-item {
+  width: v-bind(itemWidth + "px");
 }
 
 .recently-viewed-item:hover {
@@ -209,13 +263,58 @@ export default {
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
 }
 
+.carousel-btn {
+  background: none;
+  border: 1px solid; /* Set default border for both */
+  border-radius: 50%;
+  width: 40px; /* Adjust size as needed */
+  height: 40px; /* Adjust size as needed */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  padding: 0;
+  color: #666; /* Default color for disabled/inactive */
+}
+
+.carousel-btn.prev-btn {
+  border-color: #ddd; /* Light grey for previous */
+  color: #666; /* Grey arrow for previous */
+}
+
+.carousel-btn.next-btn {
+  border-color: #793444; /* Dark red for next */
+  color: #793444; /* Dark red arrow for next */
+}
+
 .carousel-btn:disabled {
   opacity: 0.5;
   cursor: not-allowed;
+  border-color: #ddd !important; /* Ensure disabled state overrides active colors */
+  color: #666 !important;
 }
 
 .carousel-btn:disabled:hover {
   border-color: #ddd;
   color: #666;
+}
+
+.arrow-icon {
+  width: 24px; /* Size of the SVG icon */
+  height: 24px; /* Size of the SVG icon */
+  fill: currentColor; /* Use the parent's color */
+}
+
+/* Responsive adjustments */
+@media (max-width: 1023px) {
+  .recently-viewed-item {
+    /* When not desktop, let calculateItemWidth handle the width */
+    width: v-bind(itemWidth + "px");
+  }
+}
+@media (max-width: 767px) {
+  .recently-viewed-item {
+    width: v-bind(itemWidth + "px");
+  }
 }
 </style>
